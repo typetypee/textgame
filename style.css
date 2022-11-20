@@ -29,23 +29,24 @@ body {
 
 #name {
   width: 30%;
-  height: 50%;
-  background-color: white;
+  height: 30%;
+  background-color: #BAB2F7;
+  border-color: black;
+  border-style: double;
   padding: 10px;
-  border-radius: 10px;
-
   /**position**/
   position: absolute;
   top: -50%;
-  z-index: -1;
 }
 
 #text-box {
   width: 60%;
   height: 10%;
   border-radius: 10px;
+  border-style: double;
+  border-color: black;
   padding: 10px;
-  background-color: white;
+  background-color: #8c91c9;
 
   /**position**/
   position: relative;

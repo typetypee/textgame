@@ -1,5 +1,8 @@
 var textBox = document.getElementById("text");
 var textName = document.getElementById("name");
+var gameWindow = document.getElementById("game-window");
+var character = document.getElementById("character");
+
 textBox.innerHTML = "AHH";
 var answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
 
@@ -29,6 +32,15 @@ function advanceText() {
   var currentStep = data.story[data.currentLine]; //the current line being displayed in the story
 
   if(data.currentLine < data.story.length) { //if the story is not over yet
+    if(undefined !== currentStep.img) { //display the graphics
+      if(undefined!== currentStep.img.bg) {
+        gameWindow.style.backgroundImage = "url(" + currentStep.img.bg + ")";
+      }
+      if(undefined !== currentStep.img.char) {
+        console.log(currentStep.img.char[0])
+        character.src = currentStep.img.char[0].url;
+      }
+    }
     if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
       textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
     }

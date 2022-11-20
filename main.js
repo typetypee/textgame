@@ -4,11 +4,11 @@ textBox.innerHTML = "AHH";
 var answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
 
 var data = {
-  data: "",
-  story: "",
-  currentLine: 0,
-  isQuestion: false,
-  option: 0,
+  data: "", //all the data
+  story: "", //the current story in the data
+  currentLine: 0, //current line in text
+  isQuestion: false, //determines whether the current line is a choice
+  option: 0, //the choice selected
 }
 
 importData("json/speech.json", function(json){
@@ -17,6 +17,7 @@ importData("json/speech.json", function(json){
 
 })
 
+//TEXT SYSTEM {
 function findLabel(label) {
     var index = data.story.findIndex(function(obj){
           return obj.label === label;
@@ -113,6 +114,8 @@ for(var i = 0; i < answerBoxes.length - 1; i++) {
     }
   });
 }
+
+//}
 
 function loop() { //loops all functions every few frames
 

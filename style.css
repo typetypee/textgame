@@ -1,5 +1,15 @@
+@font-face {
+  font-family: Neucha;
+  src: url("fonts/Neucha-Regular.ttf");
+}
+
+@font-face {
+  font-family: SyneMono;
+  src: url("fonts/SyneMono-Regular.ttf");
+}
+
 *{
-  font-family: monospace;
+  font-family: Neucha;
 
 }
 body {
@@ -12,7 +22,8 @@ body {
     overflow: hidden;
     position: relative;
     background-image: url("images/room.jpg");
-    background-size: 100%;
+    background-size: 100% 100%;
+
 
 }
 

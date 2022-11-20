@@ -113,10 +113,12 @@ window.addEventListener("keydown", function(e){ //if a key was pressed
 window.addEventListener("click", function(e) {
   if(data.isQuestion === false) advanceText();
 })
+
 function loop() { //loops all functions every few frames
 
   if(data.isQuestion === true) {
     for(var i = 0; i < answerBoxes.length; i++) {
+
       answerBoxes[i].onclick = function(){
         data.option = i;
         console.log(data.option);

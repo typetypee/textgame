@@ -1,0 +1,181 @@
+
+
+var answers = [], //stores choices player can make
+story = [], //stores the contents of the current scene dialogue
+isQuestion = false, //determines if the current
+option = 1, //keeps track of which option the player currently has selected
+currentLine = 0; //index number of the current dialogue being displayed
+
+var Textbox = function(x, y, width, height, src) { //width and height should be the original dimensions of the image
+  this.width = width;
+  this.height = height;
+  this.x =  x;
+  this.y =  y;
+  this.name = ""; //name of character
+  this.content = ""; //content of textbox
+  this.data = ""; //the speech.json file
+  this.src = src; //source of textbox image
+  this.render = function() {
+    var textboxImg = new Image(); //the image object with a name
+    textboxImg.src = this.src; //find the object src
+
+    drawSprite(textboxImg, 0, 0, this.width, this.height, this.x, this.y, this.width * 2, this.height * 2); //render it
+
+  }
+}; //stores info of the textbox
+
+var Answer = function(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.content = ""; //content of answer box
+
+  answers.push(this);
+
+} //stores info of the answer boxes
+
+//CREATION OF OBJECTS//
+
+var textbox = new Textbox(canvas.width/2-800/2, canvas.height-200, 280, 99, "images/box.png");
+
+new Answer(textbox.x + textbox.width - 30, textbox.y + 20);
+new Answer(textbox.x + textbox.width - 30, textbox.y + 40);
+
+
+
+//retrieve json data
+importData("json/speech.json", function(json){
+ textbox.data = JSON.parse(json);
+ story = textbox.data.elsie
+
+})
+
+
+function getLines(ctx, text, maxWidth) { //breaks text up into lines so it can fit into the textbox
+
+  //THE INTIAL INITIALIZATION//
+  var words = text.split(" "); //splits text at the spaces into single words. returns array, example: "i", "hate", "pie"
+  var lines = []; //the text separated into separate lines, example: "i like pie", "i hate cake", "i despise fruit"
+  var currentLine = words[0]; //the line of text created so far, example: "i hate eggs and"
+  //in intialization, the creation of currentLine creates the first line of text
+
+  //LOOPING TIME//
+  //loop through all the words in this dialogue. many lines will likely be created in the loop
+  for (var i = 1; i < words.length; i++) { //process done for each word, let's say we're on word 3
+      var word = words[i]; //find word 3 in the array of words...it's "bacon"
+      var width = ctx.measureText(currentLine + " " + word).width; //measure the width of the word "bacon"
+      if (width < maxWidth) { //the word "bacon" will not exceed the textbox width...
+          currentLine += " " + word; //...so add "bacon" to the current line of text "i hate eggs and"
+      } else { //the word "bacon" will exceed the textbox width if added to the current line of "i hate eggs and"...
+          lines.push(currentLine); //..so push the current line to the list of lines "i hate eggs and" is now in the var lines
+          currentLine = word; //current line is no linger "i hate eggs and". it is now set to "bacon" a new line has been created
+      }
+  }
+  //LOOP IS OVER//
+  //all words have been added to lines
+  lines.push(currentLine); //add the last line created to the lines list since this wasn't done in the loop
+  return lines; //this is function, so it returns the array of lines
+}
+
+
+
+function typeText(textbox) { //render the text
+  ctx.fillStyle = "white"; //set text style to white
+
+//display name
+   ctx.fillText(textbox.name, textbox.x + 20, textbox.y + 20);
+
+//type text
+  ctx.font = "12px arial";
+  var splitText = getLines(ctx, textbox.content, textbox.width - 50); //split the text into lines
+
+//render the text line by line
+  for(var i = 0; i < splitText.length; i++) {
+    ctx.fillText(splitText[i], textbox.x + 20, textbox.y + 40 + i * 15);
+  }
+
+}
+
+function renderQuestionText() { //render the choice box texts
+  for(var i = 0; i < answers.length; i++) { //loop through each answer choice, let's say we're on answer 1
+    if(i === option) ctx.fillStyle = "blue"; //if the option current selected is 1, make the text blue
+    else ctx.fillStyle = "white"; //else just make the text white
+    ctx.fillText(answers[i].content, answers[i].x, answers[i].y); //now render it with the corresponding content and positions
+
+  }
+
+}
+
+window.addEventListener("keydown", function(e){ //if a key was pressed
+  var currentStep = story[currentLine]; //he current line being displayed in the story
+
+
+  function findLabel(label) {
+      var index = story.findIndex(function(obj){
+            return obj.label === label;
+      });
+      return story.indexOf(story[index]);
+  }
+
+  if(e.keyCode === 32) { //keyccode 32: spacebar
+    if(currentLine < story.length) { //if the story is not over yet
+
+      if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
+        textbox.name = currentStep.n; //...set the name parameter of the textbox as current name
+      }
+
+      if(undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
+        textbox.content = currentStep.m; //...set the content parameter of the textbox as the current content
+
+        //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
+        if(undefined !== currentStep.next) currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
+        else { //the dialogue 1 has no "next" parameter
+          currentLine++; //just go to the next dialogue in the story
+        }
+
+      } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
+        if(isQuestion === true) {
+          currentLine = findLabel(currentStep.answers[option].next);
+          currentStep = story[currentLine];
+          textbox.content = currentStep.m;
+          if(undefined !== currentStep.n) {//if the name is not undefined...
+            textbox.name = currentStep.n; //...display it
+          }
+          isQuestion = false;
+          currentLine++;
+        } else {
+          isQuestion = true;
+          textbox.content = currentStep.question;
+          for(var i = 0; i < currentStep.answers.length; i++) {
+            answers[i].content = (currentStep.answers[i].m);
+          }
+        }
+
+      }
+    }
+  }
+
+  if(isQuestion === true) {
+    if(e.keyCode === 38) {
+      if(option === 0) option = answers.length;
+      else option--;
+
+    }
+    if(e.keyCode === 40) {
+      if(option === answers.length - 1) option = 0;
+      else option++;
+    }
+  }
+
+});
+
+function renderSpeech(){ //put all into one function
+
+
+  textbox.render();
+  typeText(textbox);
+
+  if(isQuestion === true) renderQuestionText();
+
+
+
+}

@@ -1,0 +1,130 @@
+var textBox = document.getElementById("text");
+var textName = document.getElementById("name");
+textBox.innerHTML = "AHH";
+var answerBoxes = document.getElementsByClassName("answer");
+
+
+
+
+var data = {
+  data: "",
+  story: "",
+  currentLine: 0,
+  isQuestion: false,
+  option: 0,
+}
+
+importData("json/speech.json", function(json){
+ data.data = JSON.parse(json);
+ data.story = data.data.shrek
+
+})
+
+
+
+function findLabel(label) {
+    var index = data.story.findIndex(function(obj){
+          return obj.label === label;
+    });
+    return data.story.indexOf(data.story[index]);
+}
+
+function advanceText() {
+  var currentStep = data.story[data.currentLine]; //the current line being displayed in the story
+
+  if(data.currentLine < data.story.length) { //if the story is not over yet
+
+    if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
+      textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
+    }
+
+    if(undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
+      textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
+
+      //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
+      if(undefined !== currentStep.next) data.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
+      else { //the dialogue 1 has no "next" parameter
+        data.currentLine++; //just go to the next dialogue in the story
+      }
+
+    } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
+      if(data.isQuestion === true) { //the isQuestion state has been activated. set up stuff that happens after the player answers the question
+        data.currentLine = findLabel(currentStep.answers[data.option].next);
+        currentStep = data.story[data.currentLine];
+        textBox.innerText = currentStep.m;
+        if(undefined !== currentStep.n) {//if the name is not undefined...
+          textName.innerText = currentStep.n; //...display it
+        }
+        //make the answer box disappear
+
+        document.getElementById("answer-container").style.display = "none";
+        for(var q = 0; q < answerBoxes.length; q++) {
+          answerBoxes[q].style.display = "none";
+        }
+
+        data.isQuestion = false;
+        data.currentLine++;
+      } else { //erm....it's a question but the variable has not been activated. set up the question
+        data.isQuestion = true;
+
+        //display question
+        textBox.innerText = currentStep.question;
+
+        //display answers
+        document.getElementById("answer-container").style.display = "block";
+
+        for(var w = 0; w < answerBoxes.length; w++) { //hide all the answers first...
+          answerBoxes[w].style.display = "none";
+        }
+
+        for(var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
+          answerBoxes[i].style.display = "block";
+          answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
+        }
+      }
+
+    }
+  }
+
+}
+window.addEventListener("keydown", function(e){ //if a key was pressed
+  e.preventDefault();
+
+  if(e.keyCode === 32) advanceText();
+
+/**
+  if(data.isQuestion === true) {
+    if(e.keyCode === 38) {
+      if(data.option === 0) data.option = answerBoxes.length - 1;
+      else data.option--;
+    }
+    if(e.keyCode === 40) {
+      if(data.option === answerBoxes.length - 1) data.option = 0;
+      else data.option++;
+    }
+    for(var i = 0; i < answerBoxes.length; i++) {
+      answerBoxes[i].style.backgroundColor = "white"
+    }
+    answerBoxes[data.option].style.backgroundColor = "red";
+  }
+**/
+
+})
+window.addEventListener("click", function(e) {
+  if(data.isQuestion === false) advanceText();
+})
+function loop() { //loops all functions every few frames
+
+  if(data.isQuestion === true) {
+    for(var i = 0; i < answerBoxes.length; i++) {
+      answerBoxes[i].onclick = function(){
+        data.option = i;
+        console.log(data.option);
+        advanceText();
+      };
+    }
+  }
+
+  window.requestAnimationFrame(loop);
+}
+loop();

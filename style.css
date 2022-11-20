@@ -1,0 +1,95 @@
+*{
+  font-family: monospace;
+
+}
+#game-window {
+    width: 800px;
+    height: 500px;
+    background-color: black;
+    overflow: hidden;
+    position: relative;
+    z-index: -100000;
+    background-image: url("images/room.jpg");
+    background-size: 100%;
+
+}
+
+#name {
+  width: 30%;
+  height: 50%;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+
+  /**position**/
+  position: absolute;
+  top: -50%;
+  z-index: -1;
+}
+
+#text-box {
+  width: 60%;
+  height: 10%;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: white;
+
+  /**position**/
+  position: relative;
+
+  margin: auto;
+  bottom: 20%;
+}
+
+.button {
+
+  position: relative;
+}
+
+#text {
+
+  position: relative;
+  padding: inherit;
+  overflow-wrap: break-word;
+  display: inline-block;
+  width: 95%;
+  height: 60%;
+
+
+
+
+}
+
+.character {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  margin: auto;
+  top: 20%;
+  display: block;
+  z-index: -2;
+}
+
+#answer-container {
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  display: none;
+  right: -30%;
+  top: 0;
+  padding: 5px;
+
+}
+.answer {
+  display: none;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 5px;
+
+
+}
+
+.answer:hover {
+  background-color: red;
+
+}

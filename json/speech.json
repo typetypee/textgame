@@ -134,7 +134,7 @@
   "ayaka": [
     {"m": "This is a really nice house... :O", "n": "Ayaka",
     "img":{
-      "bg": "room2.png",
+      "bg": "images/room2.png",
       "char": [
         {"url": "images/ayaka.png", "x": "", "y": ""}
       ]

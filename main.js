@@ -16,7 +16,7 @@ var data = {
 
 importData("json/speech.json", function(json){
  data.data = JSON.parse(json);
- data.story = data.data.shrek
+ data.story = data.data.ayaka
 
 })
 

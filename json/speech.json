@@ -136,7 +136,7 @@
     "img":{
       "bg": "room2.png",
       "char": [
-        {"url": "", "x": "", "y": ""}
+        {"url": "images/ayaka.png", "x": "", "y": ""}
       ]
     }},
     {"m": "Wait."},

@@ -65,8 +65,8 @@ body {
 }
 
 .character {
-  width: 40%;
-  height: 100%;
+  width: 30%;
+  height: auto;
   position: relative;
   margin: auto;
   top: 20%;

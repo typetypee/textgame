@@ -140,7 +140,7 @@
       ]
     }},
     {"m": "Wait."},
-    {"question:": "Who's property am I trespassing on? O_o", "answers":[
+    {"question": "Who's property am I trespassing on? O_o", "answers":[
       {"m": "My property?", "next": "panic"},
       {"m": "I'm not sure.", "next": "confused"}
       ]},

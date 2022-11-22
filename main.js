@@ -1,7 +1,6 @@
 var textBox = document.getElementById("text");
 var textName = document.getElementById("name");
 var gameWindow = document.getElementById("game-window");
-var character = document.getElementById("character");
 
 textBox.innerHTML = "AHH";
 var answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
@@ -28,4 +27,4 @@ function retrieveBranch(branchName) {
   })
 }
 
-retrieveBranch("shrek");
+retrieveBranch("hooman");

@@ -3,6 +3,11 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
   else img.onload = function () {ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);};
 }
 
+function calcCoord(axis, coord) {
+  if(axis === "width") return gameWindow.offsetWidth * coord;
+  else if(axis === "height") return gameWindow.offsetHeight * coord;
+}
+
 function calculateOffset(object) {
 
 }

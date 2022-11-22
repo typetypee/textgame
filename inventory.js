@@ -1,9 +1,22 @@
-var numBoxes = 100;
+var numSpaces = 5;
+var playerInventory = [
+  {"name": "Pen", "amount": "2"},
+  {"name": "Empty bottle", "amount": "1"}
+];
 var inventory = document.getElementById("inventory");
 var boxContainer = document.getElementById("box-container");
-for(var b = 0; b < numBoxes; b++) {
+
+var itemList = "";
+
+//get the list of items available
+importData("json/items.json", function(json){
+  itemList = JSON.parse(json);
+});
+
+for(var b = 0; b < numSpaces; b++) {
   var box = document.createElement("div");
   box.classList.add("inventory-box");
+  
   boxContainer.appendChild(box);
 }
 

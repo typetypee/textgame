@@ -1,7 +1,7 @@
 {
   "elsie":[
     {"m": "(Oooooo, another victim...)", "n": "Strange girl",
-      "img": {
+      "createImg": {
         "bg":"images/room2.png",
         "elsie": ""
       }
@@ -118,7 +118,7 @@
       {"m": "Uhh...what swamp?", "next": "what_swamp"},
       {"m": "This isn't your swamp!", "next": "not_yo_swamp"}
       ],
-      "img": {
+      "createImg": {
         "bg":"images/room.jpg",
         "char": [
           {"url": "images/shrek.png", "x": "100", "y": "100"}
@@ -133,7 +133,7 @@
   ],
   "ayaka": [
     {"m": "This is a really nice house... :O", "n": "Ayaka",
-    "img":{
+    "createImg":{
       "bg": "images/room2.png",
       "char": [
         {"url": "images/ayaka.png", "x": "", "y": ""}
@@ -149,5 +149,15 @@
     {"m": "I'M SORRY. I'M SO SORRY. I'LL LEAVE."},
     {"label": "confused", "m": "Oh. We're both trespassing?"},
     {"m": "Ummm..."}
+  ],
+  "hooman": [
+    {"m": "Hey.", "n": "Mystery Hooman",
+    "createImg": {
+      "bg": "images/room2.png",
+      "char": [
+        {"url": "images/hooman.png", "x":"center", "y":"bottom"}
+      ]
+    }},
+    {"m": "Feel free to look around, I guess."}
   ]
 }

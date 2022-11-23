@@ -121,7 +121,7 @@
       "createImg": {
         "bg":"images/room.jpg",
         "char": [
-          {"url": "images/shrek.png", "x": "100", "y": "100"}
+          {"url": "images/shrek.png", "x": "center", "y": "bottom"}
         ]
       }},
     {"label": "what_swamp", "m": "Erm....THE SWAMP YOU'RE STANDING IN."},
@@ -155,9 +155,15 @@
     "createImg": {
       "bg": "images/room2.png",
       "char": [
-        {"url": "images/hooman.png", "x":"center", "y":"bottom"}
+        {"name": "hooman", "url": "images/hooman.png", "x":"center", "y":"bottom"}
       ]
     }},
-    {"m": "Feel free to look around, I guess."}
+    {"m": "Feel free to look around, I guess."},
+    {"m": "...",
+      "removeImg": {
+      "char": [
+        {"name": "hooman"}
+      ]
+    }}
   ]
 }

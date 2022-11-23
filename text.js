@@ -1,9 +1,7 @@
 //TEXT SYSTEM {
 var images = [];
 function findLabel(label) {
-    var index = currentBranch.findIndex(function(obj){
-          return obj.label === label;
-    });
+    var index = findIndex(currentBranch, "label", label);
     return currentBranch.indexOf(currentBranch[index]);
 }
 
@@ -15,41 +13,41 @@ function advanceText() {
     if(undefined !== currentStep.createImg) { //this step specifies images to be created
       if(undefined!== currentStep.createImg.bg) { //display background
         gameWindow.style.backgroundImage = "url(" + currentStep.createImg.bg + ")";
-        images.push(currentStep.createImg.bg);
       }
-      if(undefined !== currentStep.createImg.char) { //display characters
+/**DISPLAY CHARACTERS**/
+      if(undefined !== currentStep.createImg.char) {
         for(var i = 0; i < currentStep.createImg.char.length; i++) {
-          console.log(currentStep.createImg.char[i]);
           var char = currentStep.createImg.char[i];
           var image = document.createElement("img");
           image.src = char.url;
-          if(undefined !== char.x) { //adjust the character x
-            if(char.x === "left") { //predefined positions
+/**ADJUST THE CHARACTER X**/
+          if(undefined !== char.x) {
+    /**PREDEFINED POSITIONS**/
+            if(char.x === "left") {
               image.style.left = "0px";
             }
-            else if (char.x === "right") { //predefined
+            else if (char.x === "right") {
               image.style.right = "0px";
             }
             else if (char.x === "center") {
               image.style.left = gameWindow.offsetWidth*0.5-(image.offsetWidth*0.5);
             }
-            else image.style.left = calcCoord("width", char.x) + "px"; //custom
+    /**CUSTOM POSITION**/
+            else image.style.left = calcCoord("width", char.x) + "px";
 
           }
-          if(undefined !== char.y) { //adjust the character y
-            if(char.y === "top") { //predefined positions
-              image.style.top = "0px";
-            }
-            else if (char.y === "bottom") { //predefined
-              image.style.bottom = "0px";
-            }
-            else if (char.y === "center") {
-              image.style.top = gameWindow.offsetHeight*0.5-(image.offsetHeight*0.5);
-            }
-            else image.style.top = char.y + "px"; //custom
+/**ADJUST THE CHARACTER Y**/
+          if(undefined !== char.y) {
+    /**PREDEFINED POSITIONS**/
+            if(char.y === "top") image.style.top = "0px";
+            else if (char.y === "bottom") image.style.bottom = "0px";
+            else if (char.y === "center") image.style.top = gameWindow.offsetHeight*0.5-(image.offsetHeight*0.5);
+    /**CUSTOM POSITION**/
+            else image.style.top = char.y + "px";
 
           }
           image.classList.add("character");
+          char.element = image;
           gameWindow.appendChild(image);
           images.push(char);
 
@@ -57,8 +55,18 @@ function advanceText() {
       }
     }
 /**IMAGE REMOVAL**/
-  if(undefined!== currentStep.removeImg) { //this step speciies images to be removed
-
+  if(undefined !== currentStep.removeImg) { //this step specifies images to be removed
+  //REMOVE CHARACTERS
+    if(undefined !== currentStep.removeImg.char) {
+      for(var i = 0; i < currentStep.removeImg.char.length; i++) {
+        var imgToRemove = currentStep.removeImg.char[i]; //find the image to be removed in the JSON
+        var imgInArrIndex = findIndex(currentStep.removeImg.char, "name", imgToRemove.name); //find the image to be removed in the image array, gotta find the index first
+        var imgInArr = images[imgInArrIndex]; //this is the image we gotta remove identified in the images array
+      //remove the element from html and remove it from images array
+        gameWindow.removeChild(imgInArr.element);
+        images.splice(imgInArrIndex, 1);
+      }
+    }
   }
     if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
       textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name

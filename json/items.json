@@ -1,10 +1,10 @@
 {
-  {
-    "name": "Pen",
-    "description": "A simple writing tool that contains ink."
+  "Pen": {
+    "description": "A simple writing tool that contains ink.",
+    "img": "images/pen.png"
   },
-  {
-    "name": "Empty bottle",
-    "description": "An empty water bottle."
+  "Empty bottle": {
+    "description": "An empty water bottle.",
+    "img": "images/empty-bottle.png"
   }
 }

@@ -118,12 +118,13 @@
       {"m": "Uhh...what swamp?", "next": "what_swamp"},
       {"m": "This isn't your swamp!", "next": "not_yo_swamp"}
       ],
-      "createImg": {
-        "bg":"images/room.jpg",
-        "char": [
-          {"url": "images/shrek.png", "x": "center", "y": "bottom"}
-        ]
-      }},
+        "createImg": {
+          "bg":"images/room.jpg",
+          "char": [
+            {"url": "images/shrek.png", "x": "center", "y": "bottom"}
+          ]
+        }
+      },
     {"label": "what_swamp", "m": "Erm....THE SWAMP YOU'RE STANDING IN."},
     {"m": "YOU BETTER GET OUT RIGHT NOW."},
     {"m": "I'M GONNA YEET YOU INTO THE YANGTZE RIVER.", "next": "laugh"},
@@ -133,12 +134,13 @@
   ],
   "ayaka": [
     {"m": "This is a really nice house... :O", "n": "Ayaka",
-    "createImg":{
-      "bg": "images/room2.png",
-      "char": [
-        {"url": "images/ayaka.png", "x": "", "y": ""}
-      ]
-    }},
+      "createImg":{
+        "bg": "images/room2.png",
+        "char": [
+          {"url": "images/ayaka.png", "x": "", "y": ""}
+        ]
+      }
+    },
     {"m": "Wait."},
     {"question": "Who's property am I trespassing on? O_o", "answers":[
       {"m": "My property?", "next": "panic"},
@@ -152,18 +154,34 @@
   ],
   "hooman": [
     {"m": "Hey.", "n": "Mystery Hooman",
-    "createImg": {
-      "bg": "images/room2.png",
-      "char": [
-        {"name": "hooman", "url": "images/hooman.png", "x":"center", "y":"bottom"}
-      ]
-    }},
-    {"m": "Feel free to look around, I guess."},
+      "createImg": {
+        "bg": "images/room2.png",
+        "char": [
+          {"name": "hooman", "url": "images/hooman.png", "x":"center", "y":"bottom"}
+        ]
+      }
+    },
+    {"m": "Feel free to look around, I guess.",
+      "moveImg": {
+        "char": [
+          {"name": "hooman", "x": "left", "y": "bottom"}
+        ]
+      }
+    },
+    {"m": "Oh, and have these.",
+      "recieveItem": {
+        "items":[
+          {"name": "Coin", "amount": "5"},
+          {"name": "Dollar bill", "amount": "2"}
+        ]
+      }
+    },
     {"m": "...",
       "removeImg": {
-      "char": [
-        {"name": "hooman"}
-      ]
-    }}
+        "char": [
+          {"name": "hooman"}
+        ]
+      }
+    }
   ]
 }

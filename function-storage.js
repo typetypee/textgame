@@ -3,6 +3,18 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
   else img.onload = function () {ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);};
 }
 
+var alertBox = document.getElementById("alert-box");
+function writeAlert(message) {
+  alertBox.style.display = "block";
+  var messageHolder = document.createElement("p");
+  messageHolder.innerText = message;
+  alertBox.appendChild(messageHolder);
+  setTimeout(function(){
+    alertBox.removeChild(messageHolder);
+    alertBox.style.display = "none";
+  }, 5000)
+}
+
 function calcCoord(axis, coord) {
   if(axis === "width") return gameWindow.offsetWidth * coord;
   else if(axis === "height") return gameWindow.offsetHeight * coord;

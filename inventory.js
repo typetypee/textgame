@@ -11,10 +11,18 @@ var itemList = "";
 //get the list of items available
 importData("json/items.json", function(json){
   itemList = JSON.parse(json);
-  renderInventory();
+  updateInventory();
 });
 
-function renderInventory() {
+function addToInventory(arrayList) {
+  for(var i = 0; i < arrayList.length; i++) {
+  var itemInfo = itemList[arrayList[i].name];
+  playerInventory.push(arrayList[i]);
+  }
+  updateInventory();
+}
+
+function updateInventory() {
   boxContainer.textContent = "";
   for(var b = 0; b < playerInventory.length; b++) {
     var box = document.createElement("div");

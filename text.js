@@ -5,6 +5,27 @@ function findLabel(label) {
     return currentBranch.indexOf(currentBranch[index]);
 }
 
+function setImagePosition(given, element) {//set the position of an element, given coordinates, and then the element to be moved
+  /**ADJUST THE CHARACTER X**/
+    if(undefined !== given.x) {
+/**PREDEFINED POSITIONS**/
+      if(given.x === "left") element.style.left = "0px";
+      else if (given.x === "right") element.style.right = "0px";
+      else if (given.x === "center") element.style.left = gameWindow.offsetWidth*0.5-(element.offsetWidth*0.5);
+/**CUSTOM POSITION**/
+      else element.style.left = calcCoord("width", char.x) + "px";
+    }
+  /**ADJUST THE CHARACTER Y**/
+    if(undefined !== given.y) {
+/**PREDEFINED POSITIONS**/
+      if(given.y === "top") element.style.top = "0px";
+      else if (given.y === "bottom") element.style.bottom = "0px";
+      else if (given.y === "center") element.style.top = gameWindow.offsetHeight*0.5-(element.offsetHeight*0.5);
+/**CUSTOM POSITION**/
+      else element.style.top = given.y + "px";
+    }
+}
+
 function advanceText() {
   var currentStep = currentBranch[textSystem.currentLine]; //the current line being displayed in the story
 
@@ -14,38 +35,13 @@ function advanceText() {
       if(undefined!== currentStep.createImg.bg) { //display background
         gameWindow.style.backgroundImage = "url(" + currentStep.createImg.bg + ")";
       }
-/**DISPLAY CHARACTERS**/
+    /**DISPLAY CHARACTERS**/
       if(undefined !== currentStep.createImg.char) {
         for(var i = 0; i < currentStep.createImg.char.length; i++) {
           var char = currentStep.createImg.char[i];
           var image = document.createElement("img");
           image.src = char.url;
-/**ADJUST THE CHARACTER X**/
-          if(undefined !== char.x) {
-    /**PREDEFINED POSITIONS**/
-            if(char.x === "left") {
-              image.style.left = "0px";
-            }
-            else if (char.x === "right") {
-              image.style.right = "0px";
-            }
-            else if (char.x === "center") {
-              image.style.left = gameWindow.offsetWidth*0.5-(image.offsetWidth*0.5);
-            }
-    /**CUSTOM POSITION**/
-            else image.style.left = calcCoord("width", char.x) + "px";
-
-          }
-/**ADJUST THE CHARACTER Y**/
-          if(undefined !== char.y) {
-    /**PREDEFINED POSITIONS**/
-            if(char.y === "top") image.style.top = "0px";
-            else if (char.y === "bottom") image.style.bottom = "0px";
-            else if (char.y === "center") image.style.top = gameWindow.offsetHeight*0.5-(image.offsetHeight*0.5);
-    /**CUSTOM POSITION**/
-            else image.style.top = char.y + "px";
-
-          }
+          setImagePosition(char, image);
           image.classList.add("character");
           char.element = image;
           gameWindow.appendChild(image);
@@ -54,9 +50,23 @@ function advanceText() {
         }
       }
     }
+/**ADJUST THE CHARACTER POSITION**/
+  if(undefined !== currentStep.moveImg) {
+    if(undefined !== currentStep.moveImg.char) {
+      for(var i = 0; i < currentStep.moveImg.char.length; i++) {
+        var imgToMove = currentStep.moveImg.char[i];
+        var imgInArrIndex = findIndex(currentStep.moveImg.char, "name", imgToMove.name);
+        var imgInArr = images[imgInArrIndex];
+        imgInArr.x = imgToMove.x;
+        imgInArr.y = imgToMove.y;
+        setImagePosition(imgInArr, imgInArr.element);
+
+      }
+    }
+  }
 /**IMAGE REMOVAL**/
   if(undefined !== currentStep.removeImg) { //this step specifies images to be removed
-  //REMOVE CHARACTERS
+  /**REMOVE CHARACTERS**/
     if(undefined !== currentStep.removeImg.char) {
       for(var i = 0; i < currentStep.removeImg.char.length; i++) {
         var imgToRemove = currentStep.removeImg.char[i]; //find the image to be removed in the JSON
@@ -68,6 +78,15 @@ function advanceText() {
       }
     }
   }
+  //**PLAYER RECIVES ITEM**//
+    if(undefined !== currentStep.recieveItem) {
+      var itemList = currentStep.recieveItem.items
+      addToInventory(itemList);
+      for(var i = 0; i < itemList.length; i++) {
+        writeAlert("You recieved " + itemList[i].name + " x" + itemList[i].amount);
+      }
+    }
+
     if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
       textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
     }
@@ -118,6 +137,7 @@ function advanceText() {
   }
 }
 
+//add event listener click function to answer buttons
 for(var i = 0; i < answerBoxes.length - 1; i++) {
   answerBoxes[i].addEventListener("click", function() {
     if(textSystem.isQuestion === true) {

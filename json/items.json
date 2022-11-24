@@ -6,5 +6,13 @@
   "Empty bottle": {
     "description": "An empty water bottle.",
     "img": "images/empty-bottle.png"
+  },
+  "Coin": {
+    "description": "A shiny coin.",
+    "img": "images/coin.png"
+  },
+  "Dollar bill": {
+    "description": "A paper currency of the United States worth one dollar.",
+    "img": "images/dollar-bill.png"
   }
 }

@@ -29,6 +29,19 @@ body {
     display: flex;
 
 }
+
+#alert-box {
+  padding: 10px;
+  width: 20%;
+  height: 20%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  color: white;
+}
+
 .character {
   width: 30%;
   height: auto;
@@ -123,6 +136,16 @@ body {
   margin-left: auto;
 }
 
+#exit-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+#exit-btn:active {
+  background-color: black;
+  color: skyblue;
+}
+
 #box-container {
     overflow-y: scroll;
     height: 100%;
@@ -136,13 +159,15 @@ body {
   padding: 10px;
 }
 .inventory-box:hover {
-    background-color: white;
-    color: blue;
+  background-color: white;
+  color: blue;
 }
 
-.inventory-box p {
-
+.inventory-box:active {
+  background-color: black;
+  color: white;
 }
+
 #info-box {
   width: 50%;
   height: auto;

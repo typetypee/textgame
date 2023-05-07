@@ -8,14 +8,22 @@ window.addEventListener("keydown", function(e){ //if a key was pressed
 })
 
 window.addEventListener("click", function(e) {
-  if(textSystem.isQuestion === false && gameState === "text") advanceText();
+  if(textSystem.isQuestion === false && gameState === "text") {
+    advanceText();
+  }
+
 })
 
 function updateGameState() {
+  if(gameState === "text") document.getElementById("text-box").style.display = "block";
+    else document.getElementById("text-box").style.display = "none";
+  if(gameState === "interact") {
+
+  }
   openCloseInventory();
 }
 
-
+eventRun();
 function loop() { //loops all functions every few frames
   updateGameState();
 

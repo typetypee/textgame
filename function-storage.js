@@ -67,3 +67,7 @@ importXML = function(path, success, error) {
   };
   xhr.send(null);
 };
+
+function getOBJ(id) {
+  return document.getElementById(id);
+}

@@ -7,9 +7,7 @@
     </head>
     <body>
       <main id = "game-window">
-        <section id = "alert-box">
-          
-        </section>
+        <section id = "alert-box"></section>
         <section id = "text-box">
           <div id = "name">Joe</div>
           <span id = "text"></span>
@@ -19,11 +17,11 @@
             <button class = "answer"></button>
             <button class = "answer"></button>
           </span>
-          <div id = "hotbar">
-            <button id = "inventory-btn">Inventory</button>
-          </div>
         </section>
-
+        <div id = "hotbar">
+          <button id = "inventory-btn">Inventory</button>
+          <button id = "back">Back</button>
+        </div>
 
         <section id = "inventory">
           <div id = "box-container"></div>
@@ -35,6 +33,22 @@
           <button id = "exit-btn">X</button>
 
         </section>
+
+      <section id = "levels">
+        <div id = "room" name = "images/big-fire.png">
+          <i>images/big-fire.png</i>
+          <img src = "images/fire.png" style = "left: 330px; top: 300px;" onclick = "runLevel('fire')">
+          <div id = "fire">
+            <i>images/forest.png</i>
+            <img src = "images/fire.png">
+            <img src = "images/pen.png">
+          </div>
+          
+        </div>
+
+      </section>
+
+
 
       </main>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -57,6 +71,8 @@
        <!--<script src = "collisions.js"></script>-->
        <script src = "function-storage.js"></script>
        <script src = "main.js"></script>
+       <script src = "graphics.js"></script>
+       <script src = "interact.js"></script>
        <script src = "text.js"></script>
        <script src = "inventory.js"></script>
        <script src = "loop.js"></script>

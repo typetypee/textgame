@@ -1,0 +1,12 @@
+{
+  "room": {"fire": "null",
+          "erik": {"pocket": "null"},
+  "room": {
+    "bg": "images/big-fire.png",
+    "images": [{"name": "fire", "x": "33", "y": "30", "url": "images/fire.png", "level": "fire]
+  },
+  "fire": {
+    "bg": "images/forest.png",
+    "images": [{"name": "pen", "x": "center", "y": "center", "url": "images/pen.png"}]
+  }
+}

@@ -43,7 +43,6 @@ body {
 }
 
 .character {
-  width: 30%;
   height: auto;
   position: absolute;
   display: block;
@@ -110,8 +109,11 @@ body {
 
 #hotbar {
   width: 100%;
-  height: 20%;
+  height: 10%;
   bottom: 0;
+  position: absolute;
+  background-color: #8c91c9;
+  z-index: 1;
 }
 #hotbar button{
   background-color: (0, 0, 0, 0);
@@ -179,4 +181,28 @@ body {
   width: auto;
   height: 40%;
 
+}
+
+#hover-box {
+  width: 10%;
+  height: 10%;
+  background-color: grey;
+  position: absolute;
+  z-index: 1;
+  display: none;
+}
+#levels {
+  width: 100%;
+  height: 100%;
+}
+#levels i {
+  display: none;
+}
+#levels img {
+  position: absolute;
+
+}
+#levels div {
+  width: 100%;
+  height: 100%;
 }

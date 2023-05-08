@@ -9,7 +9,7 @@ var boxContainer = document.getElementById("box-container");
 var itemList = "";
 
 //get the list of items available
-importData("json/items.json", function(json){
+importData("json/items.json", null, function(json){
   itemList = JSON.parse(json);
   updateInventory();
 });

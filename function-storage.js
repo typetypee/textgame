@@ -30,12 +30,14 @@ function calculateOffset(object) {
 
 }
 
-importData = function(path, success, error) {
+importData = function(path, filter, success, error) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", path, true);
   xhr.onreadystatechange = function()  {
     if(xhr.readyState === XMLHttpRequest.DONE) {
       if(xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText)l
+          const filteredData = data.filter(item => item.name === filter);
         if(success)
           success(xhr.responseText);
           console.log("Data successfully loaded!");

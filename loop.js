@@ -9,7 +9,7 @@ window.addEventListener("keydown", function(e){ //if a key was pressed
 
 window.addEventListener("click", function(e) {
   if(textSystem.isQuestion === false && gameState === "text") {
-    advanceText();
+    if(textSystem.currentLine !== 0) advanceText();
   }
 
 })

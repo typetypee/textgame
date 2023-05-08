@@ -7,31 +7,11 @@ var answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("an
 
 //VARIABLE STORAGE AREA {
 var gameState; //text, interact, inventory
-var jsonData = "";
-var currentBranch = ":D";
-var textSystem = {
-  currentLine: 0, //current line in text
-  isQuestion: false, //determines whether the current line is a choice
-  option: 0, //the choice selected
-}
 
 var levelData = "";
 var currentLevel = "";
 
 //}
-
-function retrieveBranch(branchName) {
-  textSystem.currentLine = 0;
-  textSystem.option = 0;
-
-  importData("json/speech.json", function(json){
-   jsonData = JSON.parse(json);
-   currentBranch = jsonData[branchName];
-  })
-}
-
-retrieveBranch("hooman");
-
 
 function runLevel(levelName) {
   currentLevel = levelName;
@@ -51,8 +31,14 @@ function runLevel(levelName) {
 
 
 }
+var currentScene = "room";
 function eventRun() {
   gameState = "interact";
+  currentScene = "room";
   runLevel("room");
 
 }
+
+gameWindow.addEventListener("click", function(e){
+  console.log(Math.floor(e.clientX/10) + " " + Math.floor(e.clientY/10));
+})

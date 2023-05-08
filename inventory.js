@@ -51,14 +51,16 @@ function updateInventory() {
 }
 
 function openCloseInventory() {
-  if(gameState === "inventory") inventory.style.display = "flex";
+  if(inventoryOpen) inventory.style.display = "flex";
   else inventory.style.display = "none";
 }
 
+var inventoryOpen = false;
+
 document.getElementById("inventory-btn").addEventListener("click", function(){
-  gameState = "inventory";
+  inventoryOpen = true;
 })
 document.getElementById("exit-btn").addEventListener("click", function(e){
   e.stopPropagation();
-  gameState = "text";
+  inventoryOpen = false;
 })

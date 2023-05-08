@@ -1,4 +1,24 @@
 //TEXT SYSTEM {
+
+var jsonData = "";
+var currentBranch = ":D";
+var textSystem = {
+  currentLine: 1, //current line in text
+  isQuestion: false, //determines whether the current line is a choice
+  option: 0, //the choice selected
+}
+
+function retrieveBranch(branchName) {
+  textSystem.currentLine = 0;
+  textSystem.option = 0;
+
+  importData("json/speech.json", function(json){
+   jsonData = JSON.parse(json);
+   currentBranch = jsonData[branchName];
+   advanceText();
+  })
+}
+
 function findLabel(label) {
     var index = findIndex(currentBranch, "label", label);
     return currentBranch.indexOf(currentBranch[index]);
@@ -27,43 +47,10 @@ function setImagePosition(x, y, element) {//set the position of an element, give
 }
 
 function advanceText() {
+
   var currentStep = currentBranch[textSystem.currentLine]; //the current line being displayed in the story
 
   if(textSystem.currentLine < currentBranch.length) { //if the story is not over yet
-/**IMAGE DISPLAYING**/
-    if(undefined !== currentStep.createImg) { //this step specifies images to be created
-      if(undefined!== currentStep.createImg.bg) { //display background
-        setBG(currentStep.createImg.bg);
-      }
-    /**DISPLAY CHARACTERS**/
-      if(undefined !== currentStep.createImg.char) {
-        for(var i = 0; i < currentStep.createImg.char.length; i++) {
-          var char = currentStep.createImg.char[i];
-          createIMG(char.url, char.name, char.x, char.y);
-
-        }
-      }
-    }
-/**ADJUST THE CHARACTER POSITION**/
-  if(undefined !== currentStep.moveImg) {
-    if(undefined !== currentStep.moveImg.char) {
-      for(var i = 0; i < currentStep.moveImg.char.length; i++) {
-        var imgToMove = currentStep.moveImg.char[i].name;
-        setImagePosition(currentStep.moveImg.char[i].x, currentStep.moveImg.char[i].y, document.getElementById(imgToMove));
-
-      }
-    }
-  }
-
-/**IMAGE REMOVAL**/
-  if(undefined !== currentStep.removeImg) { //this step specifies images to be removed
-  /**REMOVE CHARACTERS**/
-    if(undefined !== currentStep.removeImg.char) {
-      for(var i = 0; i < currentStep.removeImg.char.length; i++) {
-        removeIMG(currentStep.removeImg.char[i].name);
-      }
-    }
-  }
   //**PLAYER RECIVES ITEM**//
     if(undefined !== currentStep.recieveItem) {
       var itemList = currentStep.recieveItem.items
@@ -73,9 +60,8 @@ function advanceText() {
       }
     }
 
-    if(undefined !== currentStep.n) { //if the name of the current dialogue is not undefined...
-      textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
-    }
+    if(undefined !== currentStep.n) textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
+
     if(undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 
@@ -121,6 +107,11 @@ function advanceText() {
 
     }
   }
+
+  else if(textSystem.currentLine === currentBranch.length) {
+    gameState = "interact"
+  }
+
 }
 
 //add event listener click function to answer buttons
@@ -131,6 +122,34 @@ for(var i = 0; i < answerBoxes.length - 1; i++) {
       advanceText();
     }
   });
+}
+var l = {
+  "erik": {
+    "room": [
+      {"n": "talkedRoom1", "c": false},
+      {"n": "talkedRoom2", "c": false}
+    ]
+  }
+}
+function runText(branch, character) {
+  if(gameState === "interact") {
+    if(branch === '') {
+      var index = findIndex(l[character][currentScene], "c", false)
+     console.log( index)
+     retrieveBranch(l[character][currentScene][index].n);
+     if(index === l[character][currentScene].length - 1 ||  l[character][currentScene][index].c === undefined) console.log(":)")
+     else l[character][currentScene][index].c = true;
+
+     console.log(l[character][currentScene][index].c)
+
+     gameState = "text";
+    }
+    else {
+      retrieveBranch(branch);
+      gameState = "text";
+    }
+  }
+
 }
 
 //}

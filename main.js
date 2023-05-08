@@ -11,7 +11,7 @@ var levelData = "", currentLevel = "";
 
 function runLevel(levelName) {
   currentLevel = levelName;
-  var level = getOBJ(levelName), levels = getOBJ("levels").querySelectorAll("div"));
+  var level = getOBJ(levelName), levels = getOBJ("levels").getElementsByTagName("div"));
     levels.style.visibility = "hidden";
   
   level.style.visibility = "visible";

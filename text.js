@@ -24,28 +24,6 @@ function findLabel(label) {
     return currentBranch.indexOf(currentBranch[index]);
 }
 
-function setImagePosition(x, y, element) {//set the position of an element, given coordinates, and then the element to be moved
-  /**ADJUST THE CHARACTER X**/
-    if(undefined !== x) {
-/**PREDEFINED POSITIONS**/
-      if(x === "left") element.style.left = "0px";
-      else if (x === "right") element.style.right = "0px";
-      else if (x === "center") element.style.left = gameWindow.offsetWidth*0.5-(element.offsetWidth*0.5);
-/**CUSTOM POSITION**/
-      else element.style.left = x + "px";
-      //calcCoord("width", x)
-    }
-  /**ADJUST THE CHARACTER Y**/
-    if(undefined !== y) {
-/**PREDEFINED POSITIONS**/
-      if(y === "top") element.style.top = "0px";
-      else if (y === "bottom") element.style.bottom = "0px";
-      else if (y === "center") element.style.top = gameWindow.offsetHeight*0.5-(element.offsetHeight*0.5);
-/**CUSTOM POSITION**/
-      else element.style.top = y + "px";
-    }
-}
-
 function advanceText() {
 
   var currentStep = currentBranch[textSystem.currentLine]; //the current line being displayed in the story

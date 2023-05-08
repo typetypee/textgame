@@ -15,19 +15,19 @@ var currentLevel = "";
 
 function runLevel(levelName) {
   currentLevel = levelName;
-  var levels = Array.prototype.slice.call(getOBJ("levels").getElementsByTagName("div"));
-  for(var i = 0; i < levels.length; i++) {
-    levels[i].style.visibility = "hidden";
-  }
-  getOBJ(levelName).style.visibility = "visible";
+  var level = getOBJ(levelName);
+  var levels = getOBJ("levels").querySelectorAll("div"));
+    levels.style.visibility = "hidden";
+  
+  level.style.visibility = "visible";
 
-  var levelChildren = Array.prototype.slice.call(getOBJ(levelName).getElementsByTagName("div"));
+  var levelChildren = Array.prototype.slice.call(level.getElementsByTagName("div"));
   for(var i = 0; i < levelChildren.length; i++) {
         console.log(levelChildren);
     levelChildren[i].style.visibility = "hidden";
   }
 
-  setBG(getOBJ(levelName).querySelector("i").innerHTML);
+  setBG(level.querySelector("i").innerHTML);
 
 
 }

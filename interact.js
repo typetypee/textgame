@@ -1,4 +1,4 @@
-var backButton = getOBJ("back");
+const backButton = getOBJ("back");
 
 backButton.addEventListener("click", function(){
     console.log(getOBJ(currentLevel).parentNode)

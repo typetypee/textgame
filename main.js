@@ -1,22 +1,17 @@
-var textBox = document.getElementById("text");
-var textName = document.getElementById("name");
-var gameWindow = document.getElementById("game-window");
+const textBox = document.getElementById("text"), textName = document.getElementById("name"), gameWindow = document.getElementById("game-window");
 
 textBox.innerHTML = "AHH";
-var answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
+const answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
 
 //VARIABLE STORAGE AREA {
 var gameState; //text, interact, inventory
-
-var levelData = "";
-var currentLevel = "";
+var levelData = "", currentLevel = "";
 
 //}
 
 function runLevel(levelName) {
   currentLevel = levelName;
-  var level = getOBJ(levelName);
-  var levels = getOBJ("levels").querySelectorAll("div"));
+  var level = getOBJ(levelName), levels = getOBJ("levels").querySelectorAll("div"));
     levels.style.visibility = "hidden";
   
   level.style.visibility = "visible";

@@ -4,8 +4,7 @@ var playerInventory = [
   {"name": "Pen", "amount": "2"},
   {"name": "Empty bottle", "amount": "1"}
 ];
-var inventory = document.getElementById("inventory");
-var boxContainer = document.getElementById("box-container");
+const inventory = document.getElementById("inventory"), boxContainer = document.getElementById("box-container");
 var itemList = "";
 
 //get the list of items available

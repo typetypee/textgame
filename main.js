@@ -11,8 +11,10 @@ var levelData = "", currentLevel = "";
 
 function runLevel(levelName) {
   currentLevel = levelName;
-  var level = getOBJ(levelName), levels = getOBJ("levels").getElementsByTagName("div"));
-    levels.style.visibility = "hidden";
+  var level = getOBJ(levelName), levels = Array.prototype.slice.call(getOBJ("levels").getElementsByTagName("div"));
+  for(var f = 0; f < levels.length; f++) {
+    levels[f].style.visibility = "hidden";
+  }
   
   level.style.visibility = "visible";
 

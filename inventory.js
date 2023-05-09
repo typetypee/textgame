@@ -8,8 +8,8 @@ const inventory = document.getElementById("inventory"), boxContainer = document.
 var itemList = "";
 
 //get the list of items available
-importData("json/items.json", null, function(json){
-  itemList = JSON.parse(json);
+importJSON("json/items.json", null, function(json){
+  itemList = json;
   updateInventory();
 });
 

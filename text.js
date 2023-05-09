@@ -12,7 +12,7 @@ function retrieveBranch(branchName) {
   textSystem.currentLine = 0;
   textSystem.option = 0;
 
-  importData("json/speech.json", branchName, function(json){
+  importJSON("json/speech.json", branchName, function(json){
    jsonData = JSON.parse(json);
    currentBranch = jsonData[branchName];
    advanceText();

@@ -16,8 +16,8 @@ body {
 
 }
 #game-window {
-    width: 800px;
-    height: 500px;
+    width: 640px;
+    height: 360px;
     background-color: black;
     overflow: hidden;
     position: relative;

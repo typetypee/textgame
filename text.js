@@ -1,7 +1,6 @@
 //TEXT SYSTEM {
 
-var jsonData = "";
-var currentBranch = ":D";
+var textData = "";
 var textSystem = {
   currentLine: 1, //current line in text
   isQuestion: false, //determines whether the current line is a choice
@@ -13,22 +12,21 @@ function retrieveBranch(branchName) {
   textSystem.option = 0;
 
   importJSON("json/speech.json", branchName, function(json){
-   jsonData = JSON.parse(json);
-   currentBranch = jsonData[branchName];
+   textData = json;
    advanceText();
   })
 }
 
 function findLabel(label) {
-    var index = findIndex(currentBranch, "label", label);
-    return currentBranch.indexOf(currentBranch[index]);
+    var index = findIndex(textData, "label", label);
+    return textData.indexOf(textData[index]);
 }
 
 function advanceText() {
 
-  var currentStep = currentBranch[textSystem.currentLine]; //the current line being displayed in the story
+  var currentStep = textData[textSystem.currentLine]; //the current line being displayed in the story
 
-  if(textSystem.currentLine < currentBranch.length) { //if the story is not over yet
+  if(textSystem.currentLine < textData.length) { //if the story is not over yet
   //**PLAYER RECIVES ITEM**//
     if(undefined !== currentStep.recieveItem) {
       var itemList = currentStep.recieveItem.items
@@ -51,7 +49,7 @@ function advanceText() {
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
       if(textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
         textSystem.currentLine = findLabel(currentStep.answers[textSystem.option].next);
-        currentStep = currentBranch[textSystem.currentLine];
+        currentStep = textData[textSystem.currentLine];
         textBox.innerText = currentStep.m;
         if(undefined !== currentStep.n) {//if the name is not undefined...
           textName.innerText = currentStep.n; //...display it
@@ -86,9 +84,9 @@ function advanceText() {
     }
   }
 
-  else if(textSystem.currentLine === currentBranch.length) {
+  else if(textSystem.currentLine === textData.length) {
     gameState = "interact"
-    jsonData = "";
+    textData = "";
   }
 
 }
@@ -110,18 +108,18 @@ var l = {
     ]
   }
 }
+
 function runText(branch, character) {
   if(gameState === "interact") {
     if(branch === '') {
+
       var index = findIndex(l[character][currentScene], "c", false)
-     console.log( index)
-     retrieveBranch(l[character][currentScene][index].n);
-     if(index === l[character][currentScene].length - 1 ||  l[character][currentScene][index].c === undefined) console.log(":)")
-     else l[character][currentScene][index].c = true;
+      retrieveBranch(l[character][currentScene][index].n);
 
-     console.log(l[character][currentScene][index].c)
+      if(index === l[character][currentScene].length - 1 ||  l[character][currentScene][index].c === undefined) console.log(":)")
+      else l[character][currentScene][index].c = true;
 
-     gameState = "text";
+      gameState = "text";
     }
     else {
       retrieveBranch(branch);

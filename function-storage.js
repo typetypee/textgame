@@ -38,9 +38,10 @@ importJSON = function(path, filter, success, error) {
       if (xhr.status === 200) {
         var data = JSON.parse(xhr.responseText);
         var theData;
+
         if (filter === null) theData = data;
-        else theData = data.filter;
-    
+        else theData = data[filter];
+
         if (success) {
           success(theData);
         console.log("Data successfully loaded!");

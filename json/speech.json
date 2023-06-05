@@ -184,14 +184,19 @@
       }
     }
   ],
-  "talkedRoom1": [
-    {"m": "Hey.", "n": "Erik"},
-    {"m": "Nothing much going on here."},
-    {"m": "So.."},
-    {"m": "Why don't you go help out Kate?"}
-  ],
-  "talkedRoom2": [
-    {"m": "Aren't you going?", "n": "Erik"}
-
-  ]
+  "erik": {
+    "room": {
+      "talkedRoom1": [
+        {"m": "Hey.", "n": "Erik", "complete": "false"},
+        {"m": "Nothing much going on here."},
+        {"m": "So.."},
+        {"m": "Why don't you go help out Kate?"}
+      ],
+      "talkedRoom2": [
+        {"m": "Aren't you going?", "n": "Erik"}
+    
+      ]
+      }
+    }
+  }
 }

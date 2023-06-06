@@ -88,7 +88,7 @@ function advanceText() {
         }
       }
     }
-    if(undefined!==currentStep.complete && currentStep.complete !== "isLast") currentStep.complete = true;
+    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") currentStep.complete = true;
     console.log(currentStep)
   }
 
@@ -116,18 +116,18 @@ async function runText(branch, character) {
       var temp;
       //make sure the text is not reset
       console.log(nameData)
-      if(name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue 
+      if (name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue 
       else temp = textData; //use the old stored one
-      
+
       var theChosenOne; //the dialgue branch currently chosen for the character's scene
-     
+
       for (var i = 0; i < temp.length; i++) {
         var thing = temp[i] //the dialogue branch
-        var completeThing = thing[thing.length-1]; //the message containing the complete state
+        var completeThing = thing[thing.length - 1]; //the message containing the complete state
 
         var isComplete = completeThing.complete;
         console.log(completeThing)
-        if(isComplete === false && isComplete!== true) {
+        if (isComplete === false && isComplete !== true) {
           theChosenOne = i;
           break;
         }
@@ -136,7 +136,8 @@ async function runText(branch, character) {
           break;
         }
       }
-        
+      exportJSON(temp[theChosenOne]);
+
       runAndSaveText(temp[theChosenOne], character + "" + currentScene);
       gameState = "text";
     }

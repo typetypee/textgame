@@ -44,11 +44,11 @@ importJSON = function(path, filter, success, error) {
 
         if (success) {
           success(theData);
-        console.log("Data successfully loaded!");
-      } else {
-        if (error)
-          error(xhr);
-        console.log("Error loading data!");
+          console.log("Data successfully loaded!");
+        } else {
+          if (error)
+            error(xhr);
+          console.log("Error loading data!");
         }
       }
     }
@@ -74,6 +74,30 @@ importXML = function(path, success, error) {
   };
   xhr.send(null);
 };
+
+exportJSON = function(data, success, error) {
+  var xhr = new XMLHttpRequest();
+  let server = "index.js";
+
+  xhr.open("GET", server, true);
+
+  xhr.setRequestHeader("Content-type", "application/json");
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        if (success)
+          success(xhr.responseXML);
+        console.log(this.responseText);
+      } else {
+        if (error)
+          error(xhr);
+        console.log("Error sending data!");
+      }
+    }
+  };
+  xhr.send(data);
+}
 
 function getOBJ(id) {
   return document.getElementById(id);

@@ -20,7 +20,6 @@ function runLevel(levelName) {
 
   var levelChildren = Array.prototype.slice.call(level.getElementsByTagName("div"));
   for(var i = 0; i < levelChildren.length; i++) {
-        console.log(levelChildren);
     levelChildren[i].style.visibility = "hidden";
   }
 

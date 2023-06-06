@@ -185,18 +185,17 @@
     }
   ],
   "erik": {
-    "room": {
-      "talkedRoom1": [
-        {"m": "Hey.", "n": "Erik", "complete": "false"},
+    "room": [
+        [
+        {"m": "Hey.", "n": "Erik"},
         {"m": "Nothing much going on here."},
         {"m": "So.."},
-        {"m": "Why don't you go help out Kate?"}
-      ],
-      "talkedRoom2": [
-        {"m": "Aren't you going?", "n": "Erik"}
+        {"m": "Why don't you go help out Kate?", "complete": false}
+        ],
+        [
+        {"m": "Aren't you going?", "n": "Erik", "complete": "isLast"}
     
-      ]
-      }
-    }
+         ]
+    ]
   }
 }

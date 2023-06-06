@@ -1,20 +1,27 @@
 //TEXT SYSTEM {
 
 var textData = "";
+var nameData = "";
 var textSystem = {
   currentLine: 1, //current line in text
   isQuestion: false, //determines whether the current line is a choice
   option: 0, //the choice selected
 }
 
-function retrieveBranch(branchName) {
+function retrieveBranch(branchName, key) {
   textSystem.currentLine = 0;
   textSystem.option = 0;
-
-  importJSON("json/speech.json", branchName, function(json) {
-    textData = json;
-    advanceText();
+  return new Promise((resolve) => {
+    importJSON("json/speech.json", branchName, function(json) {
+      resolve(json[key]);
+    })
   })
+}
+
+function runAndSaveText(json, name) {
+  nameData = name;
+  textData = json;
+  advanceText();
 }
 
 function findLabel(label) {
@@ -80,8 +87,9 @@ function advanceText() {
           answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
         }
       }
-
     }
+    if(undefined!==currentStep.complete && currentStep.complete !== "isLast") currentStep.complete = true;
+    console.log(currentStep)
   }
 
   else if (textSystem.currentLine === textData.length) {
@@ -101,16 +109,35 @@ for (var i = 0; i < answerBoxes.length - 1; i++) {
   });
 }
 
-function runText(branch, character) {
+async function runText(branch, character) {
   if (gameState === "interact") {
+    var name = character + "" + currentScene
     if (branch === '') {
+      var temp;
+      //make sure the text is not reset
+      console.log(nameData)
+      if(name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue 
+      else temp = textData; //use the old stored one
+      
+      var theChosenOne; //the dialgue branch currently chosen for the character's scene
+     
+      for (var i = 0; i < temp.length; i++) {
+        var thing = temp[i] //the dialogue branch
+        var completeThing = thing[thing.length-1]; //the message containing the complete state
 
-      var index = findIndex(l[character][currentScene], "c", false)
-      retrieveBranch(l[character][currentScene][index].n);
-
-      if (index === l[character][currentScene].length - 1 || l[character][currentScene][index].c === undefined) console.log(":)")
-      else l[character][currentScene][index].c = true;
-
+        var isComplete = completeThing.complete;
+        console.log(completeThing)
+        if(isComplete === false && isComplete!== true) {
+          theChosenOne = i;
+          break;
+        }
+        else if (isComplete === "isLast") {
+          theChosenOne = i;
+          break;
+        }
+      }
+        
+      runAndSaveText(temp[theChosenOne], character + "" + currentScene);
       gameState = "text";
     }
     else {

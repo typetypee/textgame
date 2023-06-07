@@ -12,7 +12,7 @@ function retrieveBranch(branchName, key) {
   textSystem.currentLine = 0;
   textSystem.option = 0;
   return new Promise((resolve) => {
-    importJSON("./json/speech.json", branchName, function(json) {
+    importJSON("../json/speech.json", branchName, function(json) {
       resolve(json[key]);
     })
   })
@@ -116,7 +116,7 @@ async function runText(branch, character) {
       var temp;
       //make sure the text is not reset
       console.log(nameData)
-      if (name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue 
+      if (name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue
       else temp = textData; //use the old stored one
 
       var theChosenOne; //the dialgue branch currently chosen for the character's scene

@@ -77,13 +77,14 @@ importXML = function(path, success, error) {
 
 exportJSON = function(data, success, error) {
   var xhr = new XMLHttpRequest();
-  let server = "index.js";
+  let server = "http://localhost:3000/oogabooga";
 
-  xhr.open("GET", server, true);
+  xhr.open("POST", server, true);
 
-  xhr.setRequestHeader("Content-type", "application/json");
+  xhr.setRequestHeader("Content-Type", "text/html");
 
   xhr.onreadystatechange = function() {
+    console.log(":D")
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
         if (success)

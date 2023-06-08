@@ -81,10 +81,10 @@ exportJSON = function(data, success, error) {
 
   xhr.open("POST", server, true);
 
-  xhr.setRequestHeader("Content-Type", "text/html");
+  xhr.setRequestHeader("Content-Type", "application/json");
 
   xhr.onreadystatechange = function() {
-    console.log(":D")
+
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
         if (success)

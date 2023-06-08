@@ -136,7 +136,8 @@ async function runText(branch, character) {
           break;
         }
       }
-      exportJSON(temp[theChosenOne]);
+      var list = [character, currentScene, theChosenOne]
+      exportJSON(JSON.stringify(list));
 
       runAndSaveText(temp[theChosenOne], character + "" + currentScene);
       gameState = "text";

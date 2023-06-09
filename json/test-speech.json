@@ -1,201 +1,514 @@
 {
-  "elsie":[
-    {"m": "(Oooooo, another victim...)", "n": "Strange girl",
-      "createImg": {
-        "bg":"images/room2.png",
-        "elsie": ""
-      }
-    },
-    {"m": ">:)"},
-    {"m": "Hi!"},
-    {"m": "^-^"},
-    {"m": "Why do you look so scared?"},
-    {"question": "You aren't scared of me, are you?", "answers": [
-      {"m": "Yes", "next": "scared_yes"},
-      {"m": "No", "next": "scared_no"}
-      ]},
-
-    {"label": "scared_yes", "m": "Awwww, why are you scared of me?"},
-    {"m": "You don't have to be scared of me."},
-    {"m": "I'm completely friendly!"},
-    {"m": ":)"},
-    {"m": "^-^", "next": "ask_name"},
-    {"label": "scared_no", "m": "That's good!"},
-    {"m": "No need to be afraid of me at all!"},
-    {"m": ":)"},
-    {"m": ">:)"},
-    {"m": ":)", "next": "ask_name"},
-
-    {"label": "ask_name", "m": "So what's your name?"}
-  ],
-
-  "winston":[
-    {"m": "(I wonder when she'll be back...)", "n": "Short girl"},
-    {"m": "*gasp*"},
-    {"m": "OLIVE!!"},
-    {"m": "IS THAT YOU?!?!?"},
-    {"m": "Oh wait..." },
-    {"m": "You're not Olive..." },
-    {"m": ":'(" },
-    {"question": "Tell me if you see a girl named Olive around here.", "answers": [
-      {"m": "Who's Olive?", "next": "whois_olive"},
-      {"m": "Okay.", "next": "okay_bye" }
-      ]},
-    {"label": "whois_olive", "m": "Who's Olive?"},
-    {"m": "Hmmmm...." },
-    {"m": "..." },
-    {"m": "...Olive..." },
-    {"m": "...is this girl I like." },
-    {"m": "She's been gone for a few weeks." },
-    {"m": "But I'm sure she'll be back soon." },
-    {"m": "So tell me if you see her." },
-    {"m": "Alright?" },
-    {"label": "okay_bye", "m": "See ya around."}
-  ],
-
-  "uhoh": [
-    {"m": "Hey there!", "n": "Renee"},
-    {"m": "You're the one that's going to help find Olive?"},
-    {"m": "That's them, I'm pretty sure.", "n": "Charlie"},
-    {"m": "Great!", "n": "Renee"},
-    {"m": "Um...you haven't met us yet, so...."},
-    {"m": "I'm Renee."},
-    {"m": "My name is Alene.", "n": "Alene"},
-    {"m": "I'm Charlie.", "n": "Charlie"},
-    {"m": "...", "n": "..."},
-    {"m": "...we're missing someone.", "n": "Alene"},
-    {"m": "Winston?", "n": "Renee"},
-    {"m": "He's busy running errands for his parents."},
-    {"m": "No, not Winston.", "n": "Alene"},
-    {"m": "Oh, Elsie's not here yet.", "n": "Charlie"},
-    {"m": "She'll be here soon probably."},
-    {"m": "Ah, Elsie, right.", "n": "Renee"},
-    {"m": "We can just explain things to our helper here before then."},
-    {"m": "Alright.", "n": "Charlie"},
-    {"m": "So, um...", "n": "Renee"},
-    {"m": "You know that Olive's been missing a few weeks."},
-    {"m": "No one knows where she went."},
-    {"m": "Last time someone saw her, she went out to the forest to gather berries or something.", "n": "Charlie"},
-    {"m": "She didn't come back."},
-    {"m": "Some other people had disappeared too actually.", "n": "Alene"},
-    {"m": "Like my brother..."},
-    {"m": "He went out to the forest and never came home..."},
-    {"m": "So anyway...", "n": "Renee"},
-    {"m": "The group of us all know Olive in some way."},
-    {"m": "And we feel like all these disapperances are connected.", "n": "Alene"},
-    {"m": "So we're gonna try to get to the bottom of this."},
-    {"m": "We're going to go scout out in the forest and look for some clues or something..", "n": "Charlie"},
-    {"m": "*Someone enters the room just then.*", "n": "..."},
-    {"m": "Elsie! There you are!", "n": "Renee"},
-    {"m": "Sorry...", "n": "Elsie"},
-    {"m": "I had to wash the dishes before I came..."},
-    {"m": ":c"},
-    {"m": "At least you're here. Anyway, we gotta someone to help find Olive.", "n": "Charlie"},
-    {"m": "*Elsie turns and looks at you.*", "n": "..."},
-    {"m": "*Her expression briefly darkens before shifting to a shy smile.*", "n": "..."},
-    {"m": "*No one else seems to have noticed the glare she gave you.*"},
-    {"m": "Hello... ", "n": "Elsie"},
-    {"m": "c:"},
-    {"m": "..."},
-    {"m": "..."},
-    {"m": "..."},
-    {"question": "...", "answers": [
-      {"m": "Something wrong?", "next": "no_silence"},
-      {"m": "...", "next": "keep_silence"}
-      ]},
-
-    {"label": "no_silence","m": "No, I'm fine...", "n": "Elsie"},
-    {"m": "Elsie's just really shy. Don't mind it too much.", "n": "Charlie"},
-    {"label": "keep_silence", "m": "...sooooooo...", "n": "Renee"},
-    {"m": "We'll be heading into the forest."}
-
-
-
-
-  ],
-  "shrek":[
-    {"question": "What are you doing in MY swamp!?", "n": "Shrek", "answers": [
-      {"m": "Uhh...what swamp?", "next": "what_swamp"},
-      {"m": "This isn't your swamp!", "next": "not_yo_swamp"}
-      ],
-        "createImg": {
-          "bg":"images/room.jpg",
-          "char": [
-            {"url": "images/shrek.png", "x": "center", "y": "bottom"}
-          ]
-        }
-      },
-    {"label": "what_swamp", "m": "Erm....THE SWAMP YOU'RE STANDING IN."},
-    {"m": "YOU BETTER GET OUT RIGHT NOW."},
-    {"m": "I'M GONNA YEET YOU INTO THE YANGTZE RIVER.", "next": "laugh"},
-    {"label": "not_yo_swamp", "m": "I'll show you whose swamp this is!"},
-    {"m": "I'll break your spine you puny creature!!!"},
-    {"label": "laugh", "m": "MWAHAHAHAHAHA!!!"}
-  ],
-  "ayaka": [
-    {"m": "This is a really nice house... :O", "n": "Ayaka",
-      "createImg":{
-        "bg": "images/room2.png",
-        "char": [
-          {"url": "images/ayaka.png", "x": "", "y": ""}
-        ]
-      }
-    },
-    {"m": "Wait."},
-    {"question": "Who's property am I trespassing on? O_o", "answers":[
-      {"m": "My property?", "next": "panic"},
-      {"m": "I'm not sure.", "next": "confused"}
-      ]},
-    {"label": "panic", "m": "..."},
-    {"m": "I'M SORRY. I DON'T KNOW HOW I GOT HERE."},
-    {"m": "I'M SORRY. I'M SO SORRY. I'LL LEAVE."},
-    {"label": "confused", "m": "Oh. We're both trespassing?"},
-    {"m": "Ummm..."}
-  ],
-  "hooman": [
-    {"m": "Hey.", "n": "Mystery Hooman",
-      "createImg": {
-        "bg": "images/room2.png",
-        "char": [
-          {"name": "hooman", "url": "images/hooman.png", "x":"center", "y":"bottom"}
-        ]
-      }
-    },
-    {"m": "Feel free to look around, I guess.",
-      "moveImg": {
-        "char": [
-          {"name": "hooman", "x": "left", "y": "bottom"}
-        ]
-      }
-    },
-    {"m": "Oh, and have these.",
-      "recieveItem": {
-        "items":[
-          {"name": "Coin", "amount": "5"},
-          {"name": "Dollar bill", "amount": "2"}
-        ]
-      }
-    },
-    {"m": "...",
-      "removeImg": {
-        "char": [
-          {"name": "hooman"}
-        ]
-      }
-    }
-  ],
-  "erik": {
-    "room": [
-        [
-        {"m": "Hey.", "n": "Erik"},
-        {"m": "Nothing much going on here."},
-        {"m": "So.."},
-        {"m": "Why don't you go help out Kate?", "complete": false}
-        ],
-        [
-        {"m": "Aren't you going?", "n": "Erik", "complete": "isLast"}
-    
-         ]
-    ]
-  }
+	"elsie": [
+		{
+			"m": "(Oooooo, another victim...)",
+			"n": "Strange girl",
+			"createImg": {
+				"bg": "images/room2.png",
+				"elsie": ""
+			}
+		},
+		{
+			"m": ">:)"
+		},
+		{
+			"m": "Hi!"
+		},
+		{
+			"m": "^-^"
+		},
+		{
+			"m": "Why do you look so scared?"
+		},
+		{
+			"question": "You aren't scared of me, are you?",
+			"answers": [
+				{
+					"m": "Yes",
+					"next": "scared_yes"
+				},
+				{
+					"m": "No",
+					"next": "scared_no"
+				}
+			]
+		},
+		{
+			"label": "scared_yes",
+			"m": "Awwww, why are you scared of me?"
+		},
+		{
+			"m": "You don't have to be scared of me."
+		},
+		{
+			"m": "I'm completely friendly!"
+		},
+		{
+			"m": ":)"
+		},
+		{
+			"m": "^-^",
+			"next": "ask_name"
+		},
+		{
+			"label": "scared_no",
+			"m": "That's good!"
+		},
+		{
+			"m": "No need to be afraid of me at all!"
+		},
+		{
+			"m": ":)"
+		},
+		{
+			"m": ">:)"
+		},
+		{
+			"m": ":)",
+			"next": "ask_name"
+		},
+		{
+			"label": "ask_name",
+			"m": "So what's your name?"
+		}
+	],
+	"winston": [
+		{
+			"m": "(I wonder when she'll be back...)",
+			"n": "Short girl"
+		},
+		{
+			"m": "*gasp*"
+		},
+		{
+			"m": "OLIVE!!"
+		},
+		{
+			"m": "IS THAT YOU?!?!?"
+		},
+		{
+			"m": "Oh wait..."
+		},
+		{
+			"m": "You're not Olive..."
+		},
+		{
+			"m": ":'("
+		},
+		{
+			"question": "Tell me if you see a girl named Olive around here.",
+			"answers": [
+				{
+					"m": "Who's Olive?",
+					"next": "whois_olive"
+				},
+				{
+					"m": "Okay.",
+					"next": "okay_bye"
+				}
+			]
+		},
+		{
+			"label": "whois_olive",
+			"m": "Who's Olive?"
+		},
+		{
+			"m": "Hmmmm...."
+		},
+		{
+			"m": "..."
+		},
+		{
+			"m": "...Olive..."
+		},
+		{
+			"m": "...is this girl I like."
+		},
+		{
+			"m": "She's been gone for a few weeks."
+		},
+		{
+			"m": "But I'm sure she'll be back soon."
+		},
+		{
+			"m": "So tell me if you see her."
+		},
+		{
+			"m": "Alright?"
+		},
+		{
+			"label": "okay_bye",
+			"m": "See ya around."
+		}
+	],
+	"uhoh": [
+		{
+			"m": "Hey there!",
+			"n": "Renee"
+		},
+		{
+			"m": "You're the one that's going to help find Olive?"
+		},
+		{
+			"m": "That's them, I'm pretty sure.",
+			"n": "Charlie"
+		},
+		{
+			"m": "Great!",
+			"n": "Renee"
+		},
+		{
+			"m": "Um...you haven't met us yet, so...."
+		},
+		{
+			"m": "I'm Renee."
+		},
+		{
+			"m": "My name is Alene.",
+			"n": "Alene"
+		},
+		{
+			"m": "I'm Charlie.",
+			"n": "Charlie"
+		},
+		{
+			"m": "...",
+			"n": "..."
+		},
+		{
+			"m": "...we're missing someone.",
+			"n": "Alene"
+		},
+		{
+			"m": "Winston?",
+			"n": "Renee"
+		},
+		{
+			"m": "He's busy running errands for his parents."
+		},
+		{
+			"m": "No, not Winston.",
+			"n": "Alene"
+		},
+		{
+			"m": "Oh, Elsie's not here yet.",
+			"n": "Charlie"
+		},
+		{
+			"m": "She'll be here soon probably."
+		},
+		{
+			"m": "Ah, Elsie, right.",
+			"n": "Renee"
+		},
+		{
+			"m": "We can just explain things to our helper here before then."
+		},
+		{
+			"m": "Alright.",
+			"n": "Charlie"
+		},
+		{
+			"m": "So, um...",
+			"n": "Renee"
+		},
+		{
+			"m": "You know that Olive's been missing a few weeks."
+		},
+		{
+			"m": "No one knows where she went."
+		},
+		{
+			"m": "Last time someone saw her, she went out to the forest to gather berries or something.",
+			"n": "Charlie"
+		},
+		{
+			"m": "She didn't come back."
+		},
+		{
+			"m": "Some other people had disappeared too actually.",
+			"n": "Alene"
+		},
+		{
+			"m": "Like my brother..."
+		},
+		{
+			"m": "He went out to the forest and never came home..."
+		},
+		{
+			"m": "So anyway...",
+			"n": "Renee"
+		},
+		{
+			"m": "The group of us all know Olive in some way."
+		},
+		{
+			"m": "And we feel like all these disapperances are connected.",
+			"n": "Alene"
+		},
+		{
+			"m": "So we're gonna try to get to the bottom of this."
+		},
+		{
+			"m": "We're going to go scout out in the forest and look for some clues or something..",
+			"n": "Charlie"
+		},
+		{
+			"m": "*Someone enters the room just then.*",
+			"n": "..."
+		},
+		{
+			"m": "Elsie! There you are!",
+			"n": "Renee"
+		},
+		{
+			"m": "Sorry...",
+			"n": "Elsie"
+		},
+		{
+			"m": "I had to wash the dishes before I came..."
+		},
+		{
+			"m": ":c"
+		},
+		{
+			"m": "At least you're here. Anyway, we gotta someone to help find Olive.",
+			"n": "Charlie"
+		},
+		{
+			"m": "*Elsie turns and looks at you.*",
+			"n": "..."
+		},
+		{
+			"m": "*Her expression briefly darkens before shifting to a shy smile.*",
+			"n": "..."
+		},
+		{
+			"m": "*No one else seems to have noticed the glare she gave you.*"
+		},
+		{
+			"m": "Hello... ",
+			"n": "Elsie"
+		},
+		{
+			"m": "c:"
+		},
+		{
+			"m": "..."
+		},
+		{
+			"m": "..."
+		},
+		{
+			"m": "..."
+		},
+		{
+			"question": "...",
+			"answers": [
+				{
+					"m": "Something wrong?",
+					"next": "no_silence"
+				},
+				{
+					"m": "...",
+					"next": "keep_silence"
+				}
+			]
+		},
+		{
+			"label": "no_silence",
+			"m": "No, I'm fine...",
+			"n": "Elsie"
+		},
+		{
+			"m": "Elsie's just really shy. Don't mind it too much.",
+			"n": "Charlie"
+		},
+		{
+			"label": "keep_silence",
+			"m": "...sooooooo...",
+			"n": "Renee"
+		},
+		{
+			"m": "We'll be heading into the forest."
+		}
+	],
+	"shrek": [
+		{
+			"question": "What are you doing in MY swamp!?",
+			"n": "Shrek",
+			"answers": [
+				{
+					"m": "Uhh...what swamp?",
+					"next": "what_swamp"
+				},
+				{
+					"m": "This isn't your swamp!",
+					"next": "not_yo_swamp"
+				}
+			],
+			"createImg": {
+				"bg": "images/room.jpg",
+				"char": [
+					{
+						"url": "images/shrek.png",
+						"x": "center",
+						"y": "bottom"
+					}
+				]
+			}
+		},
+		{
+			"label": "what_swamp",
+			"m": "Erm....THE SWAMP YOU'RE STANDING IN."
+		},
+		{
+			"m": "YOU BETTER GET OUT RIGHT NOW."
+		},
+		{
+			"m": "I'M GONNA YEET YOU INTO THE YANGTZE RIVER.",
+			"next": "laugh"
+		},
+		{
+			"label": "not_yo_swamp",
+			"m": "I'll show you whose swamp this is!"
+		},
+		{
+			"m": "I'll break your spine you puny creature!!!"
+		},
+		{
+			"label": "laugh",
+			"m": "MWAHAHAHAHAHA!!!"
+		}
+	],
+	"ayaka": [
+		{
+			"m": "This is a really nice house... :O",
+			"n": "Ayaka",
+			"createImg": {
+				"bg": "images/room2.png",
+				"char": [
+					{
+						"url": "images/ayaka.png",
+						"x": "",
+						"y": ""
+					}
+				]
+			}
+		},
+		{
+			"m": "Wait."
+		},
+		{
+			"question": "Who's property am I trespassing on? O_o",
+			"answers": [
+				{
+					"m": "My property?",
+					"next": "panic"
+				},
+				{
+					"m": "I'm not sure.",
+					"next": "confused"
+				}
+			]
+		},
+		{
+			"label": "panic",
+			"m": "..."
+		},
+		{
+			"m": "I'M SORRY. I DON'T KNOW HOW I GOT HERE."
+		},
+		{
+			"m": "I'M SORRY. I'M SO SORRY. I'LL LEAVE."
+		},
+		{
+			"label": "confused",
+			"m": "Oh. We're both trespassing?"
+		},
+		{
+			"m": "Ummm..."
+		}
+	],
+	"hooman": [
+		{
+			"m": "Hey.",
+			"n": "Mystery Hooman",
+			"createImg": {
+				"bg": "images/room2.png",
+				"char": [
+					{
+						"name": "hooman",
+						"url": "images/hooman.png",
+						"x": "center",
+						"y": "bottom"
+					}
+				]
+			}
+		},
+		{
+			"m": "Feel free to look around, I guess.",
+			"moveImg": {
+				"char": [
+					{
+						"name": "hooman",
+						"x": "left",
+						"y": "bottom"
+					}
+				]
+			}
+		},
+		{
+			"m": "Oh, and have these.",
+			"recieveItem": {
+				"items": [
+					{
+						"name": "Coin",
+						"amount": "5"
+					},
+					{
+						"name": "Dollar bill",
+						"amount": "2"
+					}
+				]
+			}
+		},
+		{
+			"m": "...",
+			"removeImg": {
+				"char": [
+					{
+						"name": "hooman"
+					}
+				]
+			}
+		}
+	],
+	"erik": {
+		"room": [
+			[
+				{
+					"m": "Hey.",
+					"n": "Erik"
+				},
+				{
+					"m": "Nothing much going on here."
+				},
+				{
+					"m": "So.."
+				},
+				{
+					"m": "Why don't you go help out Kate?",
+					"complete": true
+				}
+			],
+			[
+				{
+					"m": "Aren't you going?",
+					"n": "Erik",
+					"complete": "isLast"
+				}
+			]
+		]
+	}
 }

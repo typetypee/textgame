@@ -23,17 +23,18 @@ app.listen(3000, function(){
   console.log("Server is running on port: 3000")
 });
 
-function changeData(list, fileName) {
+function changeData(list, fileName) { //by change data i mean change the json text file :)
   var temp;
-  fs.readFileSync(fileName, "utf-8", function (err, data, res) {
-    temp = data;
-    console.log(data);
-      temp[list[0]][list[1]][list[2]].complete = true;
-  })
+  const data = fs.readFileSync(fileName, "utf-8");
 
-  /**fs.writeFileSync(fileName, temp, function(err){
-    console.log("Edited!");
-  })**/
+  temp = JSON.parse(data);
+  var theChosenOne = temp[list[0]][list[1]][list[2]];
+  theChosenOne[theChosenOne.length-1].complete = true;
+
+  fs.writeFileSync(fileName, JSON.stringify(temp, null, "\t"));
+  console.log("Edited!");
+
+
 }
 
 

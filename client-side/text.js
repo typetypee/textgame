@@ -2,6 +2,8 @@
 
 var textData = "";
 var nameData = "";
+
+var list; //the location of the current dialogue so we can send to server later
 var textSystem = {
   currentLine: 1, //current line in text
   isQuestion: false, //determines whether the current line is a choice
@@ -12,15 +14,14 @@ function retrieveBranch(branchName, key) {
   textSystem.currentLine = 0;
   textSystem.option = 0;
   return new Promise((resolve) => {
-    importJSON("../json/speech.json", branchName, function(json) {
+    importJSON("../json/test-speech.json", branchName, function(json) {
       resolve(json[key]);
     })
   })
 }
 
 function runAndSaveText(json, name) {
-  nameData = name;
-  textData = json;
+  textData = json; //where the advnaceText can access the current dialgue
   advanceText();
 }
 
@@ -88,8 +89,7 @@ function advanceText() {
         }
       }
     }
-    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") currentStep.complete = true;
-    console.log(currentStep)
+    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") exportJSON(JSON.stringify(list));
   }
 
   else if (textSystem.currentLine === textData.length) {
@@ -111,35 +111,33 @@ for (var i = 0; i < answerBoxes.length - 1; i++) {
 
 async function runText(branch, character) {
   if (gameState === "interact") {
-    var name = character + "" + currentScene
+
     if (branch === '') {
-      var temp;
-      //make sure the text is not reset
-      console.log(nameData)
-      if (name !== nameData) temp = await retrieveBranch(character, currentScene); //erik's room dialogue
-      else temp = textData; //use the old stored one
+
+      var temp = await retrieveBranch(character, currentScene); //erik's room dialogue
 
       var theChosenOne; //the dialgue branch currently chosen for the character's scene
 
-      for (var i = 0; i < temp.length; i++) {
+      for (var i = 0; i < temp.length; i++) { //look through all the dialogue for the room for the next one that is uncompleted
+
         var thing = temp[i] //the dialogue branch
         var completeThing = thing[thing.length - 1]; //the message containing the complete state
 
         var isComplete = completeThing.complete;
-        console.log(completeThing)
+
         if (isComplete === false && isComplete !== true) {
           theChosenOne = i;
-          break;
+          break; //end it because uncomplete has been found
         }
         else if (isComplete === "isLast") {
-          theChosenOne = i;
+          theChosenOne = i; //no uncompletes. repeat the last dialogue
           break;
         }
       }
-      var list = [character, currentScene, theChosenOne]
-      exportJSON(JSON.stringify(list));
 
-      runAndSaveText(temp[theChosenOne], character + "" + currentScene);
+      list = [character, currentScene, theChosenOne]
+
+      runAndSaveText(temp[theChosenOne]);
       gameState = "text";
     }
     else {

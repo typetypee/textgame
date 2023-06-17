@@ -1,12 +1,3 @@
 {
-  "room": {"fire": "null",
-          "erik": {"pocket": "null"},
-  "room": {
-    "bg": "images/big-fire.png",
-    "images": [{"name": "fire", "x": "33", "y": "30", "url": "images/fire.png", "level": "fire]
-  },
-  "fire": {
-    "bg": "images/forest.png",
-    "images": [{"name": "pen", "x": "center", "y": "center", "url": "images/pen.png"}]
-  }
+"room": "\r\n<div id=\"room\" name=\"images/big-fire.png\">\r\n    <i>images/room.png</i>\r\n\r\n\r\n    <img src=\"images/fire.png\" style=\"left: 250px; top: 150px;\" onclick=\"runLevel('fire')\">\r\n    <img src=\"images/erik.png\" style=\"left: 210px; top: 200px;\" onclick=\"runLevel('erik')\">\r\n    <span class = \"sprite thing\" style=\"left:230px; top: 200px;\" onclick=\"runLevel('kate')\"></span>\r\n\r\n\r\n    <div id=\"fire\">\r\n      <i>images/forest.png</i>\r\n\r\n\r\n      <img src=\"images/fire.png\">\r\n      <img src=\"images/pen.png\">\r\n\r\n    </div>\r\n\r\n    <div id=\"erik\">\r\n      <i>images/forest.png</i>\r\n      <img src=\"images/erik.png\" style=\"left: 400px; top: 250px;\" onclick=\"runText('', 'erik')\">\r\n    </div>\r\n\r\n    <div id = \"kate\">\r\n      <i>images/forest.png</i>\r\n      <img src = \"images/shrek.png\" style = \"left: 400px; top: 250px\" onclick = \"runText('', 'kate')\">\r\n    </div>\r\n\r\n  </div>\r\n"
 }

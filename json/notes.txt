@@ -1,0 +1,24 @@
+"erik": {
+  "room": [
+      [
+      {"m": "Hey.", "n": "Erik"},
+      {"m": "Nothing much going on here."},
+      {"m": "So.."},
+      {"m": "Why don't you go help out Kate?", "complete": false}
+      ],
+      [
+      {"m": "Aren't you going?", "n": "Erik", "complete": "isLast"}
+
+       ]
+  ]
+},
+
+m: message
+n: indicates name to be displayed in text, it's not necessary for every message because the name remains unless n: is specified again
+complete: indicated whether a text node has been completed
+complete, isLast: if complete contains this attribute, then the text for this scene (room) will be repeated for the character
+checkInventory: generally for when a character requests an item. the player will already have the item and the npc notices. if false, the text node is not completed. it checks the players inventory for a specific item
+  how it works
+  if player has item, they will be given option to hand over an object
+  if they do not have item, it will end like a normal message
+checkState: likely applies to questions, or state specific dialogue. checks wheter the player has fufilled a certain conditino.

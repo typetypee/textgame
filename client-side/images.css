@@ -1,0 +1,9 @@
+.sprite {
+    background: url("images/Silly_Placeholders.png") no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.thing {
+  background-position: -32px 0px;
+}

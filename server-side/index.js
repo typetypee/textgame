@@ -15,7 +15,7 @@ app.post("/oogabooga", function(req, res, err) {
 
   res.send("Data was received!");
   console.log("Working!");
-  changeData(req.body, "../json/test-speech.json");
+  changeData(req.body, "../json/speech.json");
   res.end();
 })
 

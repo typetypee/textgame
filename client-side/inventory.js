@@ -2,7 +2,8 @@ var numSpaces = 5;
 var infoBox = document.getElementById("info-box");
 var playerInventory = [
   {"name": "Pen", "amount": "2"},
-  {"name": "Empty bottle", "amount": "1"}
+  {"name": "Empty bottle", "amount": "1"},
+  {"name": "bandages", "amount": "1"}
 ];
 const inventory = document.getElementById("inventory"), boxContainer = document.getElementById("box-container");
 var itemList = "";

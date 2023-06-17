@@ -194,8 +194,24 @@
         ],
         [
         {"m": "Aren't you going?", "n": "Erik", "complete": "isLast"}
-    
+
          ]
+    ]
+  },
+  "kate": {
+    "room": [
+      [
+        {"question": "I think I need more bandages...could you go find some please?", "checkInventory": "bandages", "answers": [
+          {"m": "Here you go.", "next": "giveBandage", "completeTrue": ["gaveMedicine"], "removeInventory": "bandages"}
+          ]},
+        {"m": "Oh, thanks!", "complete": false, "label": "giveBandage"}
+
+      ],
+      [
+        {"m": "What's up?"},
+        {"m": "Oh."},
+        {"m": "Mhm. Alrighty.", "complete": "isLast"}
+      ]
     ]
   }
 }

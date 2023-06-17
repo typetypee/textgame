@@ -14,7 +14,7 @@ function retrieveBranch(branchName, key) {
   textSystem.currentLine = 0;
   textSystem.option = 0;
   return new Promise((resolve) => {
-    importJSON("../json/test-speech.json", branchName, function(json) {
+    importJSON("../json/speech.json", branchName, function(json) {
       resolve(json[key]);
     })
   })
@@ -55,10 +55,11 @@ function advanceText() {
         textSystem.currentLine++; //just go to the next dialogue in the story
       }
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
+      //okay okay so here the player has already answered?, cuz like, we're moving on from the question
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
-        textSystem.currentLine = findLabel(currentStep.answers[textSystem.option].next);
-        currentStep = textData[textSystem.currentLine];
-        textBox.innerText = currentStep.m;
+        textSystem.currentLine = findLabel(currentStep.answers[textSystem.option].next); //find the next line
+        currentStep = textData[textSystem.currentLine]; //set the current step to the next line
+        textBox.innerText = currentStep.m; //set the text to the next line
         if (undefined !== currentStep.n) {//if the name is not undefined...
           textName.innerText = currentStep.n; //...display it
         }
@@ -71,28 +72,41 @@ function advanceText() {
         textSystem.isQuestion = false; //question process is over. set it to false now
 
       } else { //erm....it's a question but the variable has not been activated yet. set up the question so the player can respond
-        textSystem.isQuestion = true;
+          //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
+        //first..
+        if(currentStep.checkInventory !== undefined) {
+          console.log("we got here")
+          if(findIndex(playerInventory, "name", currentStep.checkInventory) === -1) { //it is not in inventory
+            textBox.innerText = currentStep.question;
+            textSystem.currentLine = textData.length; //force the ending >:)
 
-        //display question
-        textBox.innerText = currentStep.question;
+          } else {
+            textSystem.isQuestion = true;
 
-        //display answers
-        document.getElementById("answer-container").style.display = "block";
+            //display question
+            textBox.innerText = currentStep.question;
 
-        for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
-          answerBoxes[w].style.display = "none";
+            //display answers
+            document.getElementById("answer-container").style.display = "block";
+
+            for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
+              answerBoxes[w].style.display = "none";
+            }
+
+            for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
+              answerBoxes[i].style.display = "block";
+              answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
+            }
+          }
         }
 
-        for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
-          answerBoxes[i].style.display = "block";
-          answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
-        }
+
       }
     }
     if (undefined !== currentStep.complete && currentStep.complete !== "isLast") exportJSON(JSON.stringify(list));
   }
 
-  else if (textSystem.currentLine === textData.length) {
+  else if (textSystem.currentLine === textData.length) { //basically means we are finished
     gameState = "interact"
     textData = "";
   }

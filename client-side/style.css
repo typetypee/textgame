@@ -198,9 +198,12 @@ body {
 #levels i {
   display: none;
 }
-#levels img {
+#levels img{
   position: absolute;
 
+}
+#levels span{
+  position: absolute;
 }
 #levels div {
   width: 100%;

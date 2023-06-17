@@ -1,0 +1,30 @@
+
+<div id="room" name="images/big-fire.png">
+    <i>images/room.png</i>
+
+
+    <img src="images/fire.png" style="left: 250px; top: 150px;" onclick="runLevel('fire')">
+    <img src="images/erik.png" style="left: 210px; top: 200px;" onclick="runLevel('erik')">
+    <span class = "sprite thing" style="left:230px; top: 200px;" onclick="runLevel('kate')"></span>
+
+
+    <div id="fire">
+      <i>images/forest.png</i>
+
+
+      <img src="images/fire.png">
+      <img src="images/pen.png">
+
+    </div>
+
+    <div id="erik">
+      <i>images/forest.png</i>
+      <img src="images/erik.png" style="left: 400px; top: 250px;" onclick="runText('', 'erik')">
+    </div>
+
+    <div id = "kate">
+      <i>images/forest.png</i>
+      <img src = "images/shrek.png" style = "left: 400px; top: 250px" onclick = "runText('', 'kate')">
+    </div>
+
+  </div>

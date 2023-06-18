@@ -1,7 +1,7 @@
 {
-"room": [
-  "gaveMedicine": false,
-  "unsettleKate": false,
-  "upsetSora": false
-]
+  "room": {
+      "gaveMedicine": false,
+      "unsettleKate": false,
+      "upsetSora": false
+  }
 }

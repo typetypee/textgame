@@ -57,30 +57,54 @@ function advanceText() {
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
       //okay okay so here the player has already answered?, cuz like, we're moving on from the question
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
-        textSystem.currentLine = findLabel(currentStep.answers[textSystem.option].next); //find the next line
-        currentStep = textData[textSystem.currentLine]; //set the current step to the next line
-        textBox.innerText = currentStep.m; //set the text to the next line
-        if (undefined !== currentStep.n) {//if the name is not undefined...
-          textName.innerText = currentStep.n; //...display it
-        }
-        //make the answer box disappear
-        document.getElementById("answer-container").style.display = "none";
-        for (var q = 0; q < answerBoxes.length - 1; q++) {
-          answerBoxes[q].style.display = "none";
-        }
 
-        textSystem.isQuestion = false; //question process is over. set it to false now
+        var chosenAnswer = currentStep.answers[textSystem.option];
+        if(chosenAnswer.next === "endNode") { //if the node is being ended early
+            textSystem.currentLine = textData.length;
+            advanceText(); //automaticaclly end
+        } else {
+            if(chosenAnswer.removeInventory !== undefined) {
+              for(var p = 0; p < chosenAnswer.removeInventory.length; p++) {
+                removeFromInventory(chosenAnswer.removeInventory[p]);
+              }
+            }
+            if(chosenAnswer.completeTrue !== undefined) {
+              for(var q = 0; q < chosenAnswer.completeTrue.length; q++) {
+                markTrue(JSON.stringify([currentScene, chosenAnswer.completeTrue[q]]), "markquestdone");
+              }
+            }
+
+            textSystem.currentLine = findLabel(chosenAnswer.next); //find the next line
+            currentStep = textData[textSystem.currentLine]; //set the current step to the next line
+
+            textBox.innerText = currentStep.m; //set the text to the next line
+            if (undefined !== currentStep.n) textName.innerText = currentStep.n; //display the name
+
+            //make the answer box disappear
+            document.getElementById("answer-container").style.display = "none";
+            for (var q = 0; q < answerBoxes.length - 1; q++) {
+              answerBoxes[q].style.display = "none";
+            }
+
+            textSystem.isQuestion = false; //question process is over. set it to false now
+        }
 
       } else { //erm....it's a question but the variable has not been activated yet. set up the question so the player can respond
           //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
         //first..
         if(currentStep.checkInventory !== undefined) {
-          console.log("we got here")
-          if(findIndex(playerInventory, "name", currentStep.checkInventory) === -1) { //it is not in inventory
-            textBox.innerText = currentStep.question;
-            textSystem.currentLine = textData.length; //force the ending >:)
+          var pass = false; //var that checks if player has all required items
 
-          } else {
+          for(var k = 0; k < currentStep.checkInventory.length; k++) {
+            if(findIndex(playerInventory, "name", currentStep.checkInventory[k]) === -1) { //it is not in inventory
+              textBox.innerText = currentStep.question;
+              textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
+              //even if even one item is missing from inventory, end the node
+              pass = false;
+
+            } else pass = true;
+          }
+          if(pass) {
             textSystem.isQuestion = true;
 
             //display question
@@ -103,12 +127,14 @@ function advanceText() {
 
       }
     }
-    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") exportJSON(JSON.stringify(list));
+    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") markTrue(JSON.stringify(list), "marknodedone");
   }
 
-  else if (textSystem.currentLine === textData.length) { //basically means we are finished
+  else if (textSystem.currentLine === textData.length) { //basically means we are finished, and we're esentially reseting
     gameState = "interact"
     textData = "";
+    textSystem.currentLine = 0;
+    textSystem.isQuestion = false;
   }
 
 }

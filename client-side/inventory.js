@@ -22,6 +22,13 @@ function addToInventory(arrayList) {
   updateInventory();
 }
 
+function removeFromInventory(itemName) {
+  var itemIndex = findIndex(playerInventory, "name", itemName);
+  playerInventory.splice(itemIndex, 1);
+  updateInventory();
+}
+
+
 function updateInventory() {
   boxContainer.textContent = "";
   for(var b = 0; b < playerInventory.length; b++) {

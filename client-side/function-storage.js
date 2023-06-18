@@ -75,9 +75,9 @@ importXML = function(path, success, error) {
   xhr.send(null);
 };
 
-exportJSON = function(data, success, error) {
+markTrue = function(data, type, success, error) {
   var xhr = new XMLHttpRequest();
-  let server = "http://localhost:3000/oogabooga";
+  let server = "http://localhost:3000/" + type;
 
   xhr.open("POST", server, true);
 
@@ -99,6 +99,7 @@ exportJSON = function(data, success, error) {
   };
   xhr.send(data);
 }
+
 
 function getOBJ(id) {
   return document.getElementById(id);

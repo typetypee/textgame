@@ -10,7 +10,7 @@ app.use(express.static(__dirname + "/client-side"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.post("/oogabooga", function(req, res, err) {
+app.post("/marknodedone", function(req, res, err) {
  //if(err) return res.status(500).send(err);
 
   res.send("Data was received!");
@@ -19,23 +19,43 @@ app.post("/oogabooga", function(req, res, err) {
   res.end();
 })
 
-app.listen(3000, function(){
-  console.log("Server is running on port: 3000")
-});
-
 function changeData(list, fileName) { //by change data i mean change the json text file :)
   var temp;
   const data = fs.readFileSync(fileName, "utf-8");
 
   temp = JSON.parse(data);
-  var theChosenOne = temp[list[0]][list[1]][list[2]];
-  theChosenOne[theChosenOne.length-1].complete = true;
+
+
+  if(list.length == 2) {
+      temp[list[0]][list[1]] = true;
+  }
+  else {
+    //list goes like [character, currentScene, theChosenOne]
+    //the character name, the name of the currentScene, and the current dialouge node chosen from said character and scene
+    var theChosenOne = temp[list[0]][list[1]][list[2]];
+    theChosenOne[theChosenOne.length-1].complete = true;
+  }
 
   fs.writeFileSync(fileName, JSON.stringify(temp, null, "\t"));
   console.log("Edited!");
 
 
 }
+
+app.post("/markquestdone", function(req, res, err){
+  res.send("Data was recieved! I think...");
+  console.log("Working! I think...");
+  changeData(req.body, "../json/states.json");
+  res.end();
+
+})
+
+
+app.listen(3000, function(){
+  console.log("Server is running on port: 3000")
+});
+
+
 
 
 /**

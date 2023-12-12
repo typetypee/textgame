@@ -1,13 +1,13 @@
-"erik": {
+"fred": {
   "room": [
       [
-      {"m": "Hey.", "n": "Erik"},
+      {"m": "Hey.", "n": "Fred"},
       {"m": "Nothing much going on here."},
       {"m": "So.."},
-      {"m": "Why don't you go help out Kate?", "complete": false}
+      {"m": "Can you get me fish?", "complete": false}
       ],
       [
-      {"m": "Aren't you going?", "n": "Erik", "complete": "isLast"}
+      {"m": "Aren't you going? Where's my fish?", "n": "Fred", "complete": "isLast"}
 
        ]
   ]
@@ -22,3 +22,6 @@ checkInventory: generally for when a character requests an item. the player will
   if player has item, they will be given option to hand over an object
   if they do not have item, it will end like a normal message
 checkState: likely applies to questions, or state specific dialogue. checks wheter the player has fufilled a certain conditino.
+
+dec 12 2023 note: 
+i think i wanna organize diaouge based not on interatables and then their specific location/scene, but the scene, and then the interactables within that scene. Because although a scene will have recurring npcs, it won't always have a random interactable object.

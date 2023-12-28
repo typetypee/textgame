@@ -10,11 +10,11 @@ var textSystem = {
   option: 0, //the choice selected
 }
 
-function retrieveBranch(branchName, key) {
+function retrieveBranch(key) { //unlike the runscene/runlevel, this is for retrieving text-specific info rather than visuals
   textSystem.currentLine = 0;
   textSystem.option = 0;
-  return new Promise((resolve) => {
-    importJSON("../json/speech.json", branchName, function(json) {
+  return new Promise((resolve) => { //key is the name of the npc
+    importJSON("../json/speech.json", currentScene, function(json) {
       resolve(json[key]);
     })
   })
@@ -44,14 +44,59 @@ function advanceText() {
       }
     }
 
+    //**FUNCTION LIST**//
+    function endNode() {
+      textSystem.currentLine = textData.length;
+      advanceText(); //automaticaclly end
+    }
+
+    function checkInventory(message){
+      for(var k = 0; k < message.checkInventory.length; k++) { //inventory check
+        if(findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
+          return false; //if even one item is missing, return false
+        }
+      }
+      return true; //all items in inventory false
+    }
+
+    function removeInventory(message){
+      for(var p = 0; p < message.removeInventory.length; p++) {
+        removeFromInventory(message.removeInventory[p]);
+      }
+    }
+
+    function questionSetup() {
+      textSystem.isQuestion = true;
+
+      //display question
+      textBox.innerText = currentStep.question;
+
+      //display answers
+      document.getElementById("answer-container").style.display = "block";
+
+      for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
+        answerBoxes[w].style.display = "none";
+      }
+
+      for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
+        answerBoxes[i].style.display = "block";
+        answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
+      }
+    }
+
     if (undefined !== currentStep.n) textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
 
     if (undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 
       //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
-      if (undefined !== currentStep.next) textSystem.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
-      else { //the dialogue 1 has no "next" parameter
+      if (undefined !== currentStep.next) {
+        if(currentStep.next === "endNode") endNode();
+        else if(currentStep.next === "markNodeDone") {
+            markTrue(JSON.stringify(list), "marknodedone");
+            textSystem.currentLine = textData.length;
+        } else textSystem.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
+      } else { //the dialogue 1 has no "next" parameter
         textSystem.currentLine++; //just go to the next dialogue in the story
       }
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
@@ -59,16 +104,11 @@ function advanceText() {
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
 
         var chosenAnswer = currentStep.answers[textSystem.option];
-        if(chosenAnswer.next === "endNode") { //if the node is being ended early
-            textSystem.currentLine = textData.length;
-            advanceText(); //automaticaclly end
-        } else {
-            if(chosenAnswer.removeInventory !== undefined) {
-              for(var p = 0; p < chosenAnswer.removeInventory.length; p++) {
-                removeFromInventory(chosenAnswer.removeInventory[p]);
-              }
+        if(chosenAnswer.next === "endNode") endNode();
+        else {
+            if(chosenAnswer.removeInventory !== undefined) { removeInventory(chosenAnswer);
             }
-            if(chosenAnswer.completeTrue !== undefined) {
+            if(chosenAnswer.completeTrue !== undefined) { //marking certain state as true
               for(var q = 0; q < chosenAnswer.completeTrue.length; q++) {
                 markTrue(JSON.stringify([currentScene, chosenAnswer.completeTrue[q]]), "markquestdone");
               }
@@ -92,38 +132,15 @@ function advanceText() {
       } else { //erm....it's a question but the variable has not been activated yet. set up the question so the player can respond
           //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
         //first..
-        if(currentStep.checkInventory !== undefined) {
-          var pass = false; //var that checks if player has all required items
 
-          for(var k = 0; k < currentStep.checkInventory.length; k++) {
-            if(findIndex(playerInventory, "name", currentStep.checkInventory[k]) === -1) { //it is not in inventory
-              textBox.innerText = currentStep.question;
-              textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
-              //even if even one item is missing from inventory, end the node
-              pass = false;
+          if(currentStep.checkInventory !== undefined) { //occurs when an item is required to say a certain thing. The question still plays, the answer choice is just unavailable.
 
-            } else pass = true;
-          }
-          if(pass) {
-            textSystem.isQuestion = true;
-
-            //display question
-            textBox.innerText = currentStep.question;
-
-            //display answers
-            document.getElementById("answer-container").style.display = "block";
-
-            for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
-              answerBoxes[w].style.display = "none";
-            }
-
-            for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
-              answerBoxes[i].style.display = "block";
-              answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
-            }
-          }
-        }
-
+            if(checkInventory(currentStep)) {
+                textBox.innerText = currentStep.question;
+                textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
+                //even if even one item is missing from inventory, end the node
+            } else questionSetup(); //the check has been passed
+          } else questionSetup(); //set up question as normal
 
       }
     }
@@ -149,43 +166,39 @@ for (var i = 0; i < answerBoxes.length - 1; i++) {
   });
 }
 
-async function runText(branch, character) {
+async function runText(npc) { //activates when an npc is clicked, different from advanceText, which runs when clicking during a dialogue sequence
   if (gameState === "interact") {
 
-    if (branch === '') {
+    var temp = await retrieveBranch(npc); //the dialogue for a specfic npc
 
-      var temp = await retrieveBranch(character, currentScene); //erik's room dialogue
+    var theChosenOne; //the dialgue branch currently chosen for the npc's scene
 
-      var theChosenOne; //the dialgue branch currently chosen for the character's scene
+    for (var i = 0; i < temp.length; i++) { //look through all the dialogue for the npc for the next one that is uncompleted
 
-      for (var i = 0; i < temp.length; i++) { //look through all the dialogue for the room for the next one that is uncompleted
+      var thing = temp[i] //the specific dialogue branch of the npc
+      var completeThing = findIndex(thing, "complete", true); //find any messages that contain a complete marked as true, will come as -1 if there are none that are true
+      //this function checks for a true rather than looking for falses because a certain dialogue section can have multiple choices due to branching dialogue
+      var isLastCheck = findIndex(thing, "complete", "isLast");
 
-        var thing = temp[i] //the dialogue branch
-        var completeThing = thing[thing.length - 1]; //the message containing the complete state
-
-        var isComplete = completeThing.complete;
-
-        if (isComplete === false && isComplete !== true) {
-          theChosenOne = i;
-          break; //end it because uncomplete has been found
-        }
-        else if (isComplete === "isLast") {
-          theChosenOne = i; //no uncompletes. repeat the last dialogue
-          break;
-        }
+      if (completeThing === -1) {
+        theChosenOne = i;
+        break; //end it because uncomplete has been found
       }
-
-      list = [character, currentScene, theChosenOne]
-
-      runAndSaveText(temp[theChosenOne]);
-      gameState = "text";
+      else if (isLastCheck === "isLast") {
+        theChosenOne = i; //no uncompletes. repeat the last dialogue
+        break;
+      }
     }
-    else {
-      retrieveBranch(branch);
-      gameState = "text";
-    }
+
+    list = [currentScene, npc, theChosenOne]
+
+    runAndSaveText(temp[theChosenOne]); //read the comments in this function for info about it
+    gameState = "text";
   }
-
+  else {
+    retrieveBranch(branch);
+    gameState = "text";
+  }
 }
 
 //}

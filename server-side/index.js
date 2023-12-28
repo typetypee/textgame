@@ -26,11 +26,11 @@ function changeData(list, fileName) { //by change data i mean change the json te
   temp = JSON.parse(data);
 
 
-  if(list.length == 2) {
+  if(list.length == 2) { //this might be for quests
       temp[list[0]][list[1]] = true;
   }
   else {
-    //list goes like [character, currentScene, theChosenOne]
+    //list goes like [currentScene, npc, theChosenOne]
     //the character name, the name of the currentScene, and the current dialouge node chosen from said character and scene
     var theChosenOne = temp[list[0]][list[1]][list[2]];
     theChosenOne[theChosenOne.length-1].complete = true;

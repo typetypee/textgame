@@ -1,4 +1,4 @@
-function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) { //obsolete
   if (img.complete) ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
   else img.onload = function() { ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH); };
 }

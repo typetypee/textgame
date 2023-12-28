@@ -1,4 +1,29 @@
 {
-
+  "trongle-needs-help": {
+    "roy": [
+      [
+        {"m": "My friend Cab lost his right angle.", "n": "Roy"},
+        {"m": "How will he ever get through customs without it?"},
+        {"question": "Please help him.", "answers": [
+          {"m": "Hmmmmm fine.", "next": "helped"},
+          {"m": "No I don't feel like it. :/", "next": "rejected"}
+          ]
+        },
+        {"m": "Poor Cab. :(", "label": "rejected", "next": "markNodeDone"},
+        {"m": "He needs it by tonight, find it quick. D:", "label": "helped"},
+        {"m": "I don't know where Cab lost it. You'll have to ask him.", "complete": "false"}
+      ],
+      [
+        {"m": "What's Cab going to do?", "n": "Roy"},
+        {"m": "So sad. :("}
+      ]
+    ],
+    "cab": [
+      [
+        {"m": "WHERE IS MY RIGHT ANGLEEEEEEEEEEEEE?!", "n": "Cab"},
+        {"m": "I NEEEEEEEEEEED IT!"}
+      ]
+    ]
+  }
 
 }

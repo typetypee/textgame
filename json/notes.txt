@@ -15,13 +15,28 @@
 
 m: message
 n: indicates name to be displayed in text, it's not necessary for every message because the name remains unless n: is specified again
-complete: indicated whether a text node has been completed
+complete (single parameter isLast): indicated whether a text node has been completed
 complete, isLast: if complete contains this attribute, then the text for this scene (room) will be repeated for the character
-checkInventory: generally for when a character requests an item. the player will already have the item and the npc notices. if false, the text node is not completed. it checks the players inventory for a specific item
+checkInventory []: generally for when a character requests an item. the player will already have the item and the npc notices. if false, the text node is not completed. it checks the players inventory for a specific item
   how it works
   if player has item, they will be given option to hand over an object
   if they do not have item, it will end like a normal message
 checkState: likely applies to questions, or state specific dialogue. checks wheter the player has fufilled a certain conditino.
+removeInventory []: as a message plays, it removes a certain item from the inventory, usually occurs after a checkInventory is true
 
-dec 12 2023 note: 
+{"question": "Do you like fish?", "answers": [
+  {"m": "Yes!", "next": },
+  {"m": "It's too fishy for me!"}
+]}
+
+next: indicator of next part of text story will jump to
+
+dec 12 2023 note:
 i think i wanna organize diaouge based not on interatables and then their specific location/scene, but the scene, and then the interactables within that scene. Because although a scene will have recurring npcs, it won't always have a random interactable object.
+
+dec 27 2023 note
+so,
+"random-room": {
+  "person1": [{"blah blah text blah blah"}, {blah blah}],
+  "random duck": [{"ooga booga"}]
+}

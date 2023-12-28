@@ -1,10 +1,10 @@
 {
   "Pen": {
-    "description": "A simple writing tool that contains ink.",
+    "description": "A simple writing tool that contains ink. Take it apart for the laffs.",
     "img": "images/pen.png"
   },
   "Empty bottle": {
-    "description": "An empty water bottle.",
+    "description": "An empty water bottle. You should fill it up.",
     "img": "images/empty-bottle.png"
   },
   "Coin": {

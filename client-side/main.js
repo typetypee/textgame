@@ -41,12 +41,12 @@ function runLevel(levelName) {
   setBG(level.querySelector("i").innerHTML);
   currentLevel = levelName;
 }
-var currentScene = "room";
+var currentScene = "trongle-needs-help";
 
 function eventRun() {
   gameState = "interact";
-  currentScene = "room";
-  runScene("room");
+  currentScene = "trongle-needs-help";
+  runScene("trongle-needs-help");
 
 }
 

@@ -1,35 +1,56 @@
+var keys = {};
+var keys = {};
+
+window.addEventListener('keydown', function(e) {
+  keys[e.keyCode] = true;
+  e.preventDefault();
+});
+
+window.addEventListener('keyup', function(e) {
+  delete keys[e.keyCode];
+});
+
+  let direct = "down";
 function input() {
-  if(cursors.left.isDown) {
-   player.setVelocityX(-100);
+  let playerVelocity = new Phaser.Math.Vector2();
+
+  if(37 in keys && playerVelocity.y == 0) {
+   direct = "left";
+   playerVelocity.x = -1;
    player.flipX = true;
-   if(player.body.touching.down) player.anims.play("walk", true);
+   player.anims.play("walk", true);
 
   }
-  else if(cursors.right.isDown) {
-   player.setVelocityX(100);
+  else if(39 in keys && playerVelocity.y == 0) {
+    direct = "right";
+   playerVelocity.x = 1;
    player.flipX = false;
-   if(player.body.touching.down) player.anims.play("walk", true);
+   player.anims.play("walk", true);
   }
-  else {
-   player.setVelocityX(0);
+  else if(direct === ("left" || "right")){
+   playerVelocity.x = 0;
    player.anims.play("idleX", true);
   }
-  if(cursors.up.isDown) {
-   player.setVelocityY(-100);
-   if(player.body.touching.down) player.anims.play("walkUp", true);
 
+  if(38 in keys && playerVelocity.x == 0) {
+    direct = "up";
+    playerVelocity.y = -1;
+    player.anims.play("walkUp", true);
   }
-  else {
-   player.setVelocityY(0);
+  else if(direct == "up") {
+   playerVelocity.y = 0;
    player.anims.play("idleUp", true);
   }
-  if(cursors.down.isDown) {
-   player.setVelocityY(100);
-   if(player.body.touching.down) player.anims.play("walkDown", true);
+  if(40 in keys && playerVelocity.x == 0) {
+  direct = "down";
+   playerVelocity.y = 1;
+   player.anims.play("walkDown", true);
   }
-  else {
-   player.setVelocityY(0);
+  else if(direct == "down"){
+   playerVelocity.y = 0;
    player.anims.play("idleDown", true);
-
   }
+
+  playerVelocity.scale(2);
+  player.setVelocity(playerVelocity.x, playerVelocity.y);
 }

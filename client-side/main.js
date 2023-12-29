@@ -1,4 +1,4 @@
-const textBox = document.getElementById("text"), textName = document.getElementById("name"), gameWindow = document.getElementById("game-window");
+const textBox = document.getElementById("text"), textName = document.getElementById("name")
 
 textBox.innerHTML = "AHH";
 const answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
@@ -15,11 +15,20 @@ const config = {
     type: Phaser.CANVAS,
     canvas: canvas,
     physics: {
-      default: "arcade",
-      arcade: {
+      default: "matter",
+      matter: {
         debug: true,
         gravity: {y: 0}
       }
+    },
+    plugins: {
+      scene: [
+        {
+          plugin: "phaser-matter-collision-plugin",
+          key: "matterCollision",
+          mapping: "matterCollision"
+        }
+      ]
     },
     scene: {
       preload: preload,
@@ -63,13 +72,14 @@ function create() {
 
   const offsetX = 16 / 2;
   const offsetY = 16;
-  player = this.physics.add.sprite(32, 32, "player");
-  player.setOrigin(0.5, 1);
-  player.setPosition(
-    1 * 16 + offsetX,
-    1 * 16 + offsetY
-  );
-  player.setCollideWorldBounds(true);
+  function Wow(x, y) {
+    this.x = x;
+    this.y = y;
+    this.sprite = this.physics.add.sprite(this.x, this.y, "player");
+  }
+
+  player = new Phaser.Physics.Matter.Sprite(this.matter.world, 32, 32);
+  this.add.existing(player);
 
   this.anims.create({
     key: "walk",
@@ -86,7 +96,7 @@ function create() {
   })
   this.anims.create({
     key: "idleUp",
-    frames: this.anims.generateFrameNumbers("player", {frames: [9]}),
+    frames: this.anims.generateFrameNumbers("player", {frames: [7]}),
     frameRate: 10,
     repeat: -1
   })
@@ -98,7 +108,7 @@ function create() {
   })
   this.anims.create({
     key: "walkUp",
-    frames: this.anims.generateFrameNumbers("player", {frames: [8, 9, 10]}),
+    frames: this.anims.generateFrameNumbers("player", {frames: [6, 7, 8]}),
     frameRate: 10,
     repeat: -1
   })
@@ -126,6 +136,6 @@ function eventRun() {
 
 }
 
-gameWindow.addEventListener("click", function(e){
+canvas.addEventListener("click", function(e){
   console.log(Math.floor(e.clientX/10) + " " + Math.floor(e.clientY/10));
 })

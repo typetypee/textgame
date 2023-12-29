@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <main id="game-window">
+  <canvas id="game-window">
     <section id="alert-box"></section>
     <section id="text-box">
       <div id="name">Joe</div>
@@ -27,26 +27,12 @@
     </div>
 
     <section id="inventory">
-      <div id="box-container"></div>
-      <div id="info-box">
-        <h1></h1>
-        <img>
-        <p></p>
-      </div>
-      <button id="exit-btn">X</button>
 
-    </section>
-
-    <section id="levels">
-
-    </section>
-
-
-
-  </main>
-
+  </canvas>
+  <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
   <script src="function-storage.js"></script>
   <script src="main.js"></script>
+  <script src="movement.js"></script>
   <script src="graphics.js"></script>
   <script src="interact.js"></script>
   <script src="text.js"></script>

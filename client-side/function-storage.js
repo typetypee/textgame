@@ -30,7 +30,7 @@ function calculateOffset(object) {
 
 }
 
-importJSON = function(path, filter, success, error) {
+export const importJSON = function(path, filter, success, error) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", path, true);
   xhr.onreadystatechange = function() {
@@ -56,7 +56,7 @@ importJSON = function(path, filter, success, error) {
   xhr.send(null);
 };
 
-importXML = function(path, success, error) {
+export const importXML = function(path, success, error) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", path, true);
   xhr.onreadystatechange = function() {
@@ -75,7 +75,7 @@ importXML = function(path, success, error) {
   xhr.send(null);
 };
 
-markTrue = function(data, type, success, error) {
+export const markTrue = function(data, type, success, error) {
   var xhr = new XMLHttpRequest();
   let server = "http://localhost:3000/" + type;
 
@@ -98,11 +98,6 @@ markTrue = function(data, type, success, error) {
     }
   };
   xhr.send(data);
-}
-
-
-function getOBJ(id) {
-  return document.getElementById(id);
 }
 
 function parseHTML(html) {

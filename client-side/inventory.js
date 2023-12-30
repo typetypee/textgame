@@ -1,3 +1,5 @@
+import {importJSON} from "./function-storage.js"
+
 var numSpaces = 5;
 var infoBox = document.getElementById("info-box");
 var playerInventory = [
@@ -29,7 +31,7 @@ function removeFromInventory(itemName) {
 }
 
 
-function updateInventory() {
+export function updateInventory() {
   boxContainer.textContent = "";
   for(var b = 0; b < playerInventory.length; b++) {
     var box = document.createElement("div");
@@ -55,9 +57,6 @@ function updateInventory() {
     })
     boxContainer.appendChild(box);
   }
-}
-
-function openCloseInventory() {
   if(inventoryOpen) inventory.style.display = "flex";
   else inventory.style.display = "none";
 }

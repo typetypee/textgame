@@ -1,4 +1,8 @@
+import {gameState} from "./main.js"
+
 //TEXT SYSTEM {
+
+const textBox = document.getElementById("text"), textName = document.getElementById("name"), answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
 
 var textData = "";
 var nameData = "";
@@ -202,3 +206,18 @@ async function runText(npc) { //activates when an npc is clicked, different from
 }
 
 //}
+
+//EVENT LISTENERS FOR TEXT
+window.addEventListener("keydown", function(e){ //if a key was pressed
+  e.preventDefault();
+
+  if(e.keyCode === 32 && gameState === "text") advanceText();
+
+})
+
+window.addEventListener("click", function(e) {
+  if(textSystem.isQuestion === false && gameState === "text") {
+    if(textSystem.currentLine !== 0) advanceText();
+  }
+
+})

@@ -1,16 +1,20 @@
-const textBox = document.getElementById("text"), textName = document.getElementById("name")
-
-textBox.innerHTML = "AHH";
-const answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
-
+import {loadTilemap} from "./graphics.js"
+import {importJSON} from "./function-storage.js"
+import {input} from "./movement.js"
+import {updateInventory} from "./inventory.js"
+import {gridCells, moveTowards} from "./grid.js"
 //VARIABLE STORAGE AREA {
-var gameState; //text, interact, inventory
-var currentLevel = "";
+export let gameState; //text, interact, inventory
+var currentScene = "trongle-needs-help";
+export let currentTilemap = "grassyMap";
 
 const canvas = document.getElementById("game-window");
-const ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = false
+export const tileSize = 16;
+
+export let allBodies;
+export let createThis;
 //}
+
 const config = {
     type: Phaser.CANVAS,
     canvas: canvas,
@@ -49,37 +53,60 @@ function preload() {
 
   this.load.image("sky", "images/sky.png");
   this.load.spritesheet("player", "images/hero-sheet.png", {frameWidth: 32, frameHeight: 32})
+  this.load.image("shadow", "images/shadow.png");
   this.load.image("grassyTiles", "images/spritesheet.png");
   this.load.tilemapTiledJSON("grassyMap", "../json/map.json");
+  this.load.image("roy", "images/roy.png");
 }
 
 let cursors;
+export let player;
+const offsetX = tileSize / 2;
+const offsetY = tileSize;
 
+function Player(x, y, key, parentThis) {
+  this.direction = "down";
+  this.position = new Phaser.Math.Vector2(gridCells(x), gridCells(y));
+  this.sprite = new Phaser.Physics.Matter.Sprite(parentThis.matter.world, this.position.x, this.position.y, key);
+  this.destinationPosition = new Phaser.Math.Vector2(this.position.x, this.position.y);
+  this.speed = 2;
+  this.distance;
+  this.shadow = parentThis.add.image(this.position.x, this.position.y, "shadow");
+  this.updatePlayer = function() {
+    this.sprite.body.position.x = this.position.x + offsetX;
+    this.sprite.body.position.y = this.position.y;
+    this.shadow.setPosition(this.position.x + offsetX, this.position.y);
+    this.distance = moveTowards(this, this.destinationPosition, this.speed);
+  }
+  parentThis.add.existing(this.sprite);
+}
+let roy;
 function create() {
+
+  gameState = "interact";
+  currentScene = "trongle-needs-help";
+
   this.background = this.add.image(0, 0, "sky").setOrigin(0, 0)
 
   this.background.displayWidth = this.sys.canvas.width;
   this.background.displayHeight = this.sys.canvas.height;
 
-  const grassyMap = this.make.tilemap({ key: "grassyMap" });
-  grassyMap.addTilesetImage("spritesheet", "grassyTiles");
-  for (let i = 0; i < grassyMap.layers.length; i++) {
-    const layer = grassyMap
-      .createLayer(i, "spritesheet", 0, 0)
-    layer.setDepth(i);
-    layer.scale = 1;
-  }
+  loadTilemap(this, "grassyMap", "grassyTiles", "spritesheet");
+  currentTilemap = this.make.tilemap({ key: "grassyMap" });;
 
-  const offsetX = 16 / 2;
-  const offsetY = 16;
-  function Wow(x, y) {
-    this.x = x;
-    this.y = y;
-    this.sprite = this.physics.add.sprite(this.x, this.y, "player");
-  }
+  player = new Player(2, 4, "player", this)
+  roy = new Player(8, 5, "roy", this);
+  roy.sprite.setStatic(true);
 
-  player = new Phaser.Physics.Matter.Sprite(this.matter.world, 32, 32);
-  this.add.existing(player);
+  createThis = this;
+    allBodies = this.matter.world.getAllBodies();
+  console.log(allBodies)
+    allBodies.forEach(body => {
+      console.log(body)
+      if (body.hasOwnProperty('angularVelocity')) {
+      body.angularVelocity = 0;
+    }
+  });
 
   this.anims.create({
     key: "walk",
@@ -124,18 +151,27 @@ function create() {
 }
 
 function update(){
-  input();
+  player.updatePlayer();
+  roy.updatePlayer();
+
+  const hasArrived = player.distance <= 1;
+  if(hasArrived) {
+      input();
+  }
+
+  updateInventory();
+  updateGameState();
 };
 
-
-var currentScene = "trongle-needs-help";
-
-function eventRun() {
-  gameState = "interact";
-  currentScene = "trongle-needs-help";
-
-}
 
 canvas.addEventListener("click", function(e){
   console.log(Math.floor(e.clientX/10) + " " + Math.floor(e.clientY/10));
 })
+
+function updateGameState() {
+  if(gameState === "text") document.getElementById("text-box").style.display = "block";
+    else document.getElementById("text-box").style.display = "none";
+  if(gameState === "interact") {
+
+  }
+}

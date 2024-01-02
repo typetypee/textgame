@@ -1,5 +1,6 @@
 import {player, tileSize, currentTilemap, allBodies, createThis} from "./main.js"
-import {isSpaceBlocked} from "./grid.js"
+import {isSpaceBlocked, isNPCBlocking, outOfWorldBounds} from "./grid.js"
+import {findIndex} from "./function-storage.js"
 
 var keys = {};
 
@@ -22,14 +23,16 @@ export function input() {
   if(37 in keys && !yAxisMovement) {
    player.direction = "left";
    nextX -= tileSize;
-   player.sprite.flipX = true;
+   if(player.spriteFacingRight) player.sprite.flipX = true;
+   else player.sprite.flipX = false;
    player.sprite.anims.play("walk", true);
 
   }
   else if(39 in keys && !yAxisMovement) {
     player.direction = "right";
     nextX += tileSize;
-    player.sprite.flipX = false;
+    if(player.spriteFacingRight) player.sprite.flipX = false;
+    else player.sprite.flipX = true;
     player.sprite.anims.play("walk", true);
   }
   else if(player.direction === "left" || player.direction === "right") {
@@ -53,11 +56,19 @@ export function input() {
   }
 
   //check if space is freeeee OMG COLLISIION
-console.log(createThis)
-  const isColliding = allBodies.some(body=> createThis.matter.world.collides(player.sprite, body));
-  if(!isSpaceBlocked(currentTilemap, nextX/16, nextY/16) || isColliding) {
+
+  //console.log(player.isColliding)
+  //const isColliding = allBodies.some(body=> createThis.matter.world.on("collisionstart", (event, player.sprite, body)));
+  var tempBodies = allBodies;
+  var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
+  if(spriteIndex !== -1)tempBodies.splice(spriteIndex, 1);
+
+  //player.isColliding = tempBodies.forEach(body=>isNPCBlocking(body, nextX/tileSize, nextY/tileSize));
+  //console.log(player.isColliding)
+
+  if(!isSpaceBlocked(currentTilemap, nextX/tileSize, nextY/tileSize) && !tempBodies.some(body=>isNPCBlocking(body, nextX/tileSize, nextY/tileSize)) && !outOfWorldBounds(nextX/tileSize, nextY/tileSize)) {
     player.destinationPosition.x = nextX;
     player.destinationPosition.y = nextY;
   }
-//  console.log(isSpaceBlocked(currentTilemap, nextX/16, nextY/16))
+//  console.log(isSpaceBlocked(currentTilemap, nextX/tileSize, nextY/tileSize))
 }

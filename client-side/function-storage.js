@@ -20,7 +20,7 @@ function calcCoord(axis, coord) {
   else if (axis === "height") return gameWindow.offsetHeight * coord;
 }
 
-function findIndex(array, key, element) {
+export function findIndex(array, key, element) {
   var index = array.findIndex(function(obj) {
     return obj[key] === element;
   });

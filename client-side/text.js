@@ -1,4 +1,6 @@
-import {gameState} from "./main.js"
+import {player, createThis, currentScene, allBodies} from "./main.js"
+import {touchingWho} from "./grid.js"
+import {importJSON, findIndex, markTrue} from "./function-storage.js"
 
 //TEXT SYSTEM {
 
@@ -205,13 +207,30 @@ async function runText(npc) { //activates when an npc is clicked, different from
   }
 }
 
+function changeState(){}
+
 //}
 
 //EVENT LISTENERS FOR TEXT
 window.addEventListener("keydown", function(e){ //if a key was pressed
   e.preventDefault();
+  if(e.keyCode === 32) {
 
-  if(e.keyCode === 32 && gameState === "text") advanceText();
+    if(gameState === "interact") {
+      var tempBodies = allBodies;
+      var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
+      if(spriteIndex !== -1)tempBodies.splice(spriteIndex, 1);
+
+      let name;
+      for(let i = 0; i < tempBodies.length; i++) {
+        name = touchingWho(tempBodies[i], player.position.x/16, player.position.y/16);
+        if(name !== false) break;
+      }
+      console.log(name)
+      if(name !== false) runText(name);
+    }
+    if(gameState === "text") advanceText();
+  }
 
 })
 

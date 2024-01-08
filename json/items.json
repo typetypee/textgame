@@ -1,10 +1,10 @@
 {
   "Pen": {
-    "description": "A simple writing tool that contains ink. Take it apart for the laffs.",
+    "description": "Take it apart for the laffs.",
     "img": "images/pen.png"
   },
   "Empty bottle": {
-    "description": "An empty water bottle. You should fill it up.",
+    "description": "Don't throw it into the ocean.",
     "img": "images/empty-bottle.png"
   },
   "Coin": {
@@ -12,7 +12,29 @@
     "img": "images/coin.png"
   },
   "Dollar bill": {
-    "description": "A paper currency of the United States worth one dollar.",
+    "description": "I don't think it's real money.",
     "img": "images/dollar-bill.png"
+  },
+  "$0.27 coin": {
+    "description": "A coin worth $0.27 from 1982.",
+    "img": ""
+  },
+  "Carrot can": {
+    "description": "It looks like someone has opened the can, emptied it, and then resealed it."
+  },
+  "Teapot": {
+    "description": "A spider is liviing in here."
+  },
+  "Pot": {
+    "description": "It's made out of copper! You should turn it in at the recycling center for a few bucks."
+  },
+  "Book": {
+    "description": "Nothing is written inside it."
+  },
+  "Plate": {
+    "description": "It looks very breakable."
+  },
+  "Orange can": {
+    "description": "The label says it's 78% orange, 22% mercury."
   }
 }

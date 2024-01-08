@@ -199,21 +199,30 @@ body {
   z-index: 1;
   display: none;
 }
-#levels {
-  width: 100%;
-  height: 100%;
-}
-#levels i {
-  display: none;
-}
-#levels img{
-  position: absolute;
 
-}
-#levels span{
+#look-in {
+  width: 90%;
+  height: 90%;
+  background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
+  top: 5%;
+  z-index: 5;
+  display: flex;
 }
-#levels div {
-  width: 100%;
-  height: 100%;
+
+#hover {
+  width: 20%;
+  height: 20%;
+  background-color: grey;
+  position: absolute;
+  z-index: 6;
+  display: none;
+  padding: 10px;
+}
+#hover h3 {
+  padding: 0;
+  margin: 0;
+}
+#hover p {
+  font-size: 10px;
 }

@@ -26,6 +26,7 @@ export function findIndex(array, key, element) {
   });
   return index;
 }
+
 function calculateOffset(object) {
 
 }

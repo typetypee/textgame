@@ -1,5 +1,5 @@
-import {player, tileSize, currentTilemap, allBodies, createThis} from "./main.js"
-import {isSpaceBlocked, isNPCBlocking, outOfWorldBounds} from "./grid.js"
+import {player, tileSize, currentTilemap, allBodies, createThis, getTempBodies} from "./main.js"
+import {isSpaceBlocked, isNPCBlocking, outOfWorldBounds, behindSprite, frontSprite, isSpaceType} from "./grid.js"
 import {findIndex} from "./function-storage.js"
 
 var keys = {};
@@ -59,16 +59,29 @@ export function input() {
 
   //console.log(player.isColliding)
   //const isColliding = allBodies.some(body=> createThis.matter.world.on("collisionstart", (event, player.sprite, body)));
-  var tempBodies = allBodies;
-  var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
-  if(spriteIndex !== -1)tempBodies.splice(spriteIndex, 1);
+
+ var tempBodies = getTempBodies(player);
 
   //player.isColliding = tempBodies.forEach(body=>isNPCBlocking(body, nextX/tileSize, nextY/tileSize));
   //console.log(player.isColliding)
 
-  if(!isSpaceBlocked(currentTilemap, nextX/tileSize, nextY/tileSize) && !tempBodies.some(body=>isNPCBlocking(body, nextX/tileSize, nextY/tileSize)) && !outOfWorldBounds(nextX/tileSize, nextY/tileSize)) {
+  function sharedCode() {
+    if(tempBodies.some(bodies=> behindSprite(bodies, nextX/tileSize, nextY/tileSize))) player.depth = player.ogDepth-0.5;
+    else if(tempBodies.some(bodies=>frontSprite(bodies, nextX/tileSize, nextY/tileSize))) player.depth = player.ogDepth+0.25;
+    else player.depth = player.ogDepth;
+
+    //move the player
     player.destinationPosition.x = nextX;
     player.destinationPosition.y = nextY;
+  }
+
+  if(!isSpaceBlocked(currentTilemap, nextX/tileSize, nextY/tileSize) && !tempBodies.some(body=>isNPCBlocking(body, nextX/tileSize, nextY/tileSize)) && !outOfWorldBounds(nextX/tileSize, nextY/tileSize)) {
+    /**
+    //collision only active if player is on stairs
+    if(isSpaceType("isStairs", currentTilemap, player.position.x/tileSize, player.position.y/tileSize)) { //if on stairs, check for collision
+      if(!isSpaceType("stairsCollision", currentTilemap, nextX/tileSize, nextY/tileSize)) sharedCode();
+    } else sharedCode(); //else just run shared code**/
+    sharedCode();
   }
 //  console.log(isSpaceBlocked(currentTilemap, nextX/tileSize, nextY/tileSize))
 }

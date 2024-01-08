@@ -1,6 +1,7 @@
-import {player, createThis, currentScene, allBodies} from "./main.js"
+import {player, createThis, currentScene, allBodies, getTempBodies, currentTilemap, tileSize} from "./main.js"
 import {touchingWho} from "./grid.js"
 import {importJSON, findIndex, markTrue} from "./function-storage.js"
+import {lookInPlace} from "./inventory.js"
 
 //TEXT SYSTEM {
 
@@ -90,12 +91,19 @@ function advanceText() {
       }
     }
 
-    if (undefined !== currentStep.n) textName.innerText = currentStep.n; //...set the name parameter of the textbox as current name
-
+    if (undefined !== currentStep.n) { //...set the name parameter of the textbox as current name
+      textName.innerText = currentStep.n;
+      textName.style.display = "block";
+    } else if(currentStep.n === "noName") textName.style.display = "none";
     if (undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 
       //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
+      if(undefined !== currentStep.event) {
+        console.log("O")
+        if(currentStep.event.split(":")[0] == "lookIn") lookInPlace(currentStep.event.split(":")[1]);
+      }
+
       if (undefined !== currentStep.next) {
         if(currentStep.next === "endNode") endNode();
         else if(currentStep.next === "markNodeDone") {
@@ -110,6 +118,11 @@ function advanceText() {
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
 
         var chosenAnswer = currentStep.answers[textSystem.option];
+        if(undefined !== chosenAnswer.event) {
+          console.log(chosenAnswer.event)
+          if(chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
+        }
+
         if(chosenAnswer.next === "endNode") endNode();
         else {
             if(chosenAnswer.removeInventory !== undefined) { removeInventory(chosenAnswer);
@@ -217,17 +230,26 @@ window.addEventListener("keydown", function(e){ //if a key was pressed
   if(e.keyCode === 32) {
 
     if(gameState === "interact") {
-      var tempBodies = allBodies;
+      //interacting with a sprite?
+      var tempBodies = getTempBodies(player);
       var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
       if(spriteIndex !== -1)tempBodies.splice(spriteIndex, 1);
 
       let name;
       for(let i = 0; i < tempBodies.length; i++) {
-        name = touchingWho(tempBodies[i], player.position.x/16, player.position.y/16);
+        name = touchingWho(tempBodies[i], player.position.x/tileSize, player.position.y/tileSize);
         if(name !== false) break;
       }
-      console.log(name)
       if(name !== false) runText(name);
+
+      //or interacting with an object
+      var getInteractLayer = currentTilemap.objects[0].objects;
+      let interactWho;
+      for(let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
+        interactWho = touchingWho(getInteractLayer[k], player.position.x/tileSize, player.position.y/tileSize);
+        if(interactWho !== false) break;
+      }
+      if(interactWho !== false) runText(interactWho);
     }
     if(gameState === "text") advanceText();
   }

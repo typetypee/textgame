@@ -11,7 +11,7 @@
         },
         {"m": "Poor Cab. :(", "label": "rejected", "next": "markNodeDone"},
         {"m": "He needs it by tonight, find it quick. D:", "label": "helped"},
-        {"m": "I don't know where Cab lost it. You'll have to ask him.", "complete": "false"}
+        {"m": "Go interrogate Cab.", "complete": "false"}
       ],
       [
         {"m": "What's Cab going to do?", "n": "Roy"},
@@ -22,6 +22,14 @@
       [
         {"m": "WHERE IS MY RIGHT ANGLEEEEEEEEEEEEE?!", "n": "Cab"},
         {"m": "I NEEEEEEEEEEED IT!"}
+      ]
+    ],
+    "sink": [
+      [
+        {"question": "Let's rob Roy's house!.", "answers": [
+          {"m": "Look inside cabinet.", "next": "endNode", "event": "lookIn:cabinet-sink"},
+          {"m": "Look inside sink.", "next": "endNode",  "event": "lookIn:sink-sink"}
+          ], "n": "noName"}
       ]
     ]
   }

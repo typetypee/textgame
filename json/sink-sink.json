@@ -1,0 +1,66 @@
+{ "compressionlevel":-1,
+ "height":3,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 58, 0, 33, 0, 0, 0, 59, 0, 33, 26, 26, 37, 59, 64],
+         "height":3,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":6,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.7.2",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "columns":8,
+         "firstgid":1,
+         "image":"..\/client-side\/images\/TopDownHouse_SmallItems.png",
+         "imageheight":128,
+         "imagewidth":128,
+         "margin":0,
+         "name":"house4",
+         "spacing":0,
+         "tilecount":64,
+         "tileheight":16,
+         "tiles":[
+                {
+                 "id":25,
+                 "type":"Book"
+                },
+                {
+                 "id":32,
+                 "type":"Plate"
+                },
+                {
+                 "id":36,
+                 "type":"Pot"
+                },
+                {
+                 "id":57,
+                 "type":"Orange can"
+                },
+                {
+                 "id":58,
+                 "type":"Carrot can"
+                },
+                {
+                 "id":63,
+                 "type":"Teapot"
+                }],
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.6",
+ "width":6
+}

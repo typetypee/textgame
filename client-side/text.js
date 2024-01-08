@@ -92,9 +92,12 @@ function advanceText() {
     }
 
     if (undefined !== currentStep.n) { //...set the name parameter of the textbox as current name
-      textName.innerText = currentStep.n;
-      textName.style.display = "block";
-    } else if(currentStep.n === "noName") textName.style.display = "none";
+       if(currentStep.n === "noName") textName.style.display = "none"
+       else {
+        textName.innerText = currentStep.n;
+        textName.style.display = "block";
+      }
+    }
     if (undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 

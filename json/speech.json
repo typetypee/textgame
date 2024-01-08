@@ -26,10 +26,11 @@
     ],
     "sink": [
       [
-        {"question": "Let's rob Roy's house!.", "answers": [
+        {"question": "Let's rob Roy's house!", "answers": [
           {"m": "Look inside cabinet.", "next": "endNode", "event": "lookIn:cabinet-sink"},
           {"m": "Look inside sink.", "next": "endNode",  "event": "lookIn:sink-sink"}
-          ], "n": "noName"}
+          ],
+        "n": "noName"}
       ]
     ]
   }

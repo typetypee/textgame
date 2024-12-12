@@ -102,7 +102,7 @@ export const markTrue = function(data, type, success, error) {
 }
 
 function parseHTML(html) {
-    var t = document.createElement('template');
-    t.innerHTML = html;
-    return t.content.cloneNode(true);
+  var t = document.createElement('template');
+  t.innerHTML = html;
+  return t.content.cloneNode(true);
 }

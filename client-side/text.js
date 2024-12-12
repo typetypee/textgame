@@ -1,13 +1,15 @@
-import {player, createThis, currentScene, allBodies, getTempBodies, currentTilemap, tileSize} from "./main.js"
-import {touchingWho} from "./grid.js"
-import {importJSON, findIndex, markTrue} from "./function-storage.js"
-import {lookInPlace} from "./inventory.js"
+import { player, createThis, currentTextScene, allBodies, getTempBodies, currentTilemap, tileSize } from "./main.js"
+import { touchingWho } from "./grid.js"
+import { importJSON, findIndex, markTrue } from "./function-storage.js"
+import { lookInPlace } from "./inventory.js"
+
+//this file contains the code for the text system of the game
 
 //TEXT SYSTEM {
 
 const textBox = document.getElementById("text"), textName = document.getElementById("name"), answerBoxes = Array.prototype.slice.call(document.getElementsByClassName("answer"));
 
-var textData = "";
+var textData = ""; //stores the dialgoue data for the current scene
 var nameData = "";
 
 var list; //the location of the current dialogue so we can send to server later
@@ -21,14 +23,14 @@ function retrieveBranch(key) { //unlike the runscene/runlevel, this is for retri
   textSystem.currentLine = 0;
   textSystem.option = 0;
   return new Promise((resolve) => { //key is the name of the npc
-    importJSON("../json/speech.json", currentScene, function(json) {
+    importJSON("../json/speech.json", currentTextScene, function(json) {
       resolve(json[key]);
     })
   })
 }
 
 function runAndSaveText(json, name) {
-  textData = json; //where the advnaceText can access the current dialgue
+  textData = json; //where the advanceText can access the current dialgue
   advanceText();
 }
 
@@ -37,6 +39,7 @@ function findLabel(label) {
   return textData.indexOf(textData[index]);
 }
 
+//this function is usually triggered by a keypress, it advances text along
 function advanceText() {
 
   var currentStep = textData[textSystem.currentLine]; //the current line being displayed in the story
@@ -57,17 +60,17 @@ function advanceText() {
       advanceText(); //automaticaclly end
     }
 
-    function checkInventory(message){
-      for(var k = 0; k < message.checkInventory.length; k++) { //inventory check
-        if(findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
+    function checkInventory(message) {
+      for (var k = 0; k < message.checkInventory.length; k++) { //inventory check
+        if (findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
           return false; //if even one item is missing, return false
         }
       }
       return true; //all items in inventory false
     }
 
-    function removeInventory(message){
-      for(var p = 0; p < message.removeInventory.length; p++) {
+    function removeInventory(message) {
+      for (var p = 0; p < message.removeInventory.length; p++) {
         removeFromInventory(message.removeInventory[p]);
       }
     }
@@ -92,8 +95,8 @@ function advanceText() {
     }
 
     if (undefined !== currentStep.n) { //...set the name parameter of the textbox as current name
-       if(currentStep.n === "noName") textName.style.display = "none"
-       else {
+      if (currentStep.n === "noName") textName.style.display = "none"
+      else {
         textName.innerText = currentStep.n;
         textName.style.display = "block";
       }
@@ -102,16 +105,16 @@ function advanceText() {
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 
       //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
-      if(undefined !== currentStep.event) {
+      if (undefined !== currentStep.event) {
         console.log("O")
-        if(currentStep.event.split(":")[0] == "lookIn") lookInPlace(currentStep.event.split(":")[1]);
+        if (currentStep.event.split(":")[0] == "lookIn") lookInPlace(currentStep.event.split(":")[1]);
       }
 
       if (undefined !== currentStep.next) {
-        if(currentStep.next === "endNode") endNode();
-        else if(currentStep.next === "markNodeDone") {
-            markTrue(JSON.stringify(list), "marknodedone");
-            textSystem.currentLine = textData.length;
+        if (currentStep.next === "endNode") endNode();
+        else if (currentStep.next === "markNodeDone") {
+          markTrue(JSON.stringify(list), "marknodedone");
+          textSystem.currentLine = textData.length;
         } else textSystem.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
       } else { //the dialogue 1 has no "next" parameter
         textSystem.currentLine++; //just go to the next dialogue in the story
@@ -121,48 +124,49 @@ function advanceText() {
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
 
         var chosenAnswer = currentStep.answers[textSystem.option];
-        if(undefined !== chosenAnswer.event) {
+        if (undefined !== chosenAnswer.event) {
           console.log(chosenAnswer.event)
-          if(chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
+          if (chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
         }
 
-        if(chosenAnswer.next === "endNode") endNode();
+        if (chosenAnswer.next === "endNode") endNode();
         else {
-            if(chosenAnswer.removeInventory !== undefined) { removeInventory(chosenAnswer);
+          if (chosenAnswer.removeInventory !== undefined) {
+            removeInventory(chosenAnswer);
+          }
+          if (chosenAnswer.completeTrue !== undefined) { //marking certain state as true
+            for (var q = 0; q < chosenAnswer.completeTrue.length; q++) {
+              markTrue(JSON.stringify([currentTextScene, chosenAnswer.completeTrue[q]]), "markquestdone");
             }
-            if(chosenAnswer.completeTrue !== undefined) { //marking certain state as true
-              for(var q = 0; q < chosenAnswer.completeTrue.length; q++) {
-                markTrue(JSON.stringify([currentScene, chosenAnswer.completeTrue[q]]), "markquestdone");
-              }
-            }
+          }
 
-            textSystem.currentLine = findLabel(chosenAnswer.next); //find the next line
-            currentStep = textData[textSystem.currentLine]; //set the current step to the next line
+          textSystem.currentLine = findLabel(chosenAnswer.next); //find the next line
+          currentStep = textData[textSystem.currentLine]; //set the current step to the next line
 
-            textBox.innerText = currentStep.m; //set the text to the next line
-            if (undefined !== currentStep.n) textName.innerText = currentStep.n; //display the name
+          textBox.innerText = currentStep.m; //set the text to the next line
+          if (undefined !== currentStep.n) textName.innerText = currentStep.n; //display the name
 
-            //make the answer box disappear
-            document.getElementById("answer-container").style.display = "none";
-            for (var q = 0; q < answerBoxes.length - 1; q++) {
-              answerBoxes[q].style.display = "none";
-            }
+          //make the answer box disappear
+          document.getElementById("answer-container").style.display = "none";
+          for (var q = 0; q < answerBoxes.length - 1; q++) {
+            answerBoxes[q].style.display = "none";
+          }
 
-            textSystem.isQuestion = false; //question process is over. set it to false now
+          textSystem.isQuestion = false; //question process is over. set it to false now
         }
 
       } else { //erm....it's a question but the variable has not been activated yet. set up the question so the player can respond
-          //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
+        //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
         //first..
 
-          if(currentStep.checkInventory !== undefined) { //occurs when an item is required to say a certain thing. The question still plays, the answer choice is just unavailable.
+        if (currentStep.checkInventory !== undefined) { //occurs when an item is required to say a certain thing. The question still plays, the answer choice is just unavailable.
 
-            if(checkInventory(currentStep)) {
-                textBox.innerText = currentStep.question;
-                textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
-                //even if even one item is missing from inventory, end the node
-            } else questionSetup(); //the check has been passed
-          } else questionSetup(); //set up question as normal
+          if (checkInventory(currentStep)) {
+            textBox.innerText = currentStep.question;
+            textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
+            //even if even one item is missing from inventory, end the node
+          } else questionSetup(); //the check has been passed
+        } else questionSetup(); //set up question as normal
 
       }
     }
@@ -212,7 +216,7 @@ async function runText(npc) { //activates when an npc is clicked, different from
       }
     }
 
-    list = [currentScene, npc, theChosenOne]
+    list = [currentTextScene, npc, theChosenOne]
 
     runAndSaveText(temp[theChosenOne]); //read the comments in this function for info about it
     gameState = "text";
@@ -223,45 +227,45 @@ async function runText(npc) { //activates when an npc is clicked, different from
   }
 }
 
-function changeState(){}
+function changeState() { }
 
 //}
 
 //EVENT LISTENERS FOR TEXT
-window.addEventListener("keydown", function(e){ //if a key was pressed
+window.addEventListener("keydown", function(e) { //if a key was pressed
   e.preventDefault();
-  if(e.keyCode === 32) {
+  if (e.keyCode === 32) {
 
-    if(gameState === "interact") {
+    if (gameState === "interact") {
       //interacting with a sprite?
       var tempBodies = getTempBodies(player);
       var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
-      if(spriteIndex !== -1)tempBodies.splice(spriteIndex, 1);
+      if (spriteIndex !== -1) tempBodies.splice(spriteIndex, 1);
 
       let name;
-      for(let i = 0; i < tempBodies.length; i++) {
-        name = touchingWho(tempBodies[i], player.position.x/tileSize, player.position.y/tileSize);
-        if(name !== false) break;
+      for (let i = 0; i < tempBodies.length; i++) {
+        name = touchingWho(tempBodies[i], player.position.x / tileSize, player.position.y / tileSize);
+        if (name !== false) break;
       }
-      if(name !== false) runText(name);
+      if (name !== false) runText(name);
 
       //or interacting with an object
       var getInteractLayer = currentTilemap.objects[0].objects;
       let interactWho;
-      for(let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
-        interactWho = touchingWho(getInteractLayer[k], player.position.x/tileSize, player.position.y/tileSize);
-        if(interactWho !== false) break;
+      for (let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
+        interactWho = touchingWho(getInteractLayer[k], player.position.x / tileSize, player.position.y / tileSize);
+        if (interactWho !== false) break;
       }
-      if(interactWho !== false) runText(interactWho);
+      if (interactWho !== false) runText(interactWho);
     }
-    if(gameState === "text") advanceText();
+    if (gameState === "text") advanceText();
   }
 
 })
 
 window.addEventListener("click", function(e) {
-  if(textSystem.isQuestion === false && gameState === "text") {
-    if(textSystem.currentLine !== 0) advanceText();
+  if (textSystem.isQuestion === false && gameState === "text") {
+    if (textSystem.currentLine !== 0) advanceText();
   }
 
 })

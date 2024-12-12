@@ -1,0 +1,10 @@
+states.json is broken up by
+"text-nodes"
+text-nodes contains the scenes, which contain the npcs. Some but not all interactable objects in each scene may have a state that marks true after you talk to them. Some states may be set true if you choose certain text options in that scene.
+Yes, states will be organized by scenes.
+The story will be very state-driven, certain paths will be unlocked if certain states are true.
+
+"states"
+I'm not sure if I should just combine this and text-nodes.
+
+Anyway, I intend to make speech.json readonly, while states.json is something made for every user, kind of to track and save progress.

@@ -1,7 +1,8 @@
 import { player, createThis, currentTextScene, allBodies, getTempBodies, currentTilemap, tileSize } from "./main.js"
 import { touchingWho } from "./grid.js"
-import { importJSON, findIndex, markTrue } from "./function-storage.js"
+import { importFile, findIndex, markTrue } from "./function-storage.js"
 import { lookInPlace } from "./inventory.js"
+import { convertReedableToJSON } from "./reedable.js"
 
 //this file contains the code for the text system of the game
 
@@ -14,7 +15,7 @@ var nameData = "";
 
 var list; //the location of the current dialogue so we can send to server later
 var textSystem = {
-  currentLine: 1, //current line in text
+  currentLine: 1, //current line in text, i think the 1 is arbitrary here...
   isQuestion: false, //determines whether the current line is a choice
   option: 0, //the choice selected
 }
@@ -22,9 +23,12 @@ var textSystem = {
 function retrieveBranch(key) { //unlike the runscene/runlevel, this is for retrieving text-specific info rather than visuals
   textSystem.currentLine = 0;
   textSystem.option = 0;
-  return new Promise((resolve) => { //key is the name of the npc
-    importJSON("../json/speech.json", currentTextScene, function(json) {
-      resolve(json[key]);
+  return new Promise((resolve) => { //"key" is the name of the actor
+    importFile("../reedable/script.txt", function(data) {
+      //process the data
+      let json = convertReedableToJSON(data);
+      console.log(json);
+      resolve(data);
     })
   })
 }
@@ -46,6 +50,7 @@ function advanceText() {
 
   if (textSystem.currentLine < textData.length) { //if the story is not over yet
     //**PLAYER RECIVES ITEM**//
+    //i must recontemplate this .receiveItem event...
     if (undefined !== currentStep.recieveItem) {
       var itemList = currentStep.recieveItem.items
       addToInventory(itemList);
@@ -55,11 +60,12 @@ function advanceText() {
     }
 
     //**FUNCTION LIST**//
+    //used to end the interaction automatically
     function endNode() {
       textSystem.currentLine = textData.length;
       advanceText(); //automaticaclly end
     }
-
+    //i don't even remember what this is for
     function checkInventory(message) {
       for (var k = 0; k < message.checkInventory.length; k++) { //inventory check
         if (findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
@@ -74,7 +80,7 @@ function advanceText() {
         removeFromInventory(message.removeInventory[p]);
       }
     }
-
+    //for setting up a question
     function questionSetup() {
       textSystem.isQuestion = true;
 
@@ -101,6 +107,7 @@ function advanceText() {
         textName.style.display = "block";
       }
     }
+
     if (undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
 
@@ -124,8 +131,9 @@ function advanceText() {
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
 
         var chosenAnswer = currentStep.answers[textSystem.option];
+        //trigger the event associated with the answer choice
         if (undefined !== chosenAnswer.event) {
-          console.log(chosenAnswer.event)
+          //a specific type of event
           if (chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
         }
 
@@ -159,8 +167,9 @@ function advanceText() {
         //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
         //first..
 
+        //the mechanics of this must also be contemplated
         if (currentStep.checkInventory !== undefined) { //occurs when an item is required to say a certain thing. The question still plays, the answer choice is just unavailable.
-
+          //i think this is for when you want to give an item to someone for a quest, and you give it by pressing a certain answer choice
           if (checkInventory(currentStep)) {
             textBox.innerText = currentStep.question;
             textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
@@ -195,9 +204,9 @@ for (var i = 0; i < answerBoxes.length - 1; i++) {
 async function runText(npc) { //activates when an npc is clicked, different from advanceText, which runs when clicking during a dialogue sequence
   if (gameState === "interact") {
 
-    var temp = await retrieveBranch(npc); //the dialogue for a specfic npc
+    var tempData = await retrieveBranch(npc); //the dialogue for a specfic npc
 
-    var theChosenOne; //the dialgue branch currently chosen for the npc's scene
+    var theChosenOne; //the node currently chosen for the npc's scene
 
     for (var i = 0; i < temp.length; i++) { //look through all the dialogue for the npc for the next one that is uncompleted
 

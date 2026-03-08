@@ -1,5 +1,5 @@
 import { loadTilemap, hihi } from "./graphics.js"
-import { importJSON, findIndex } from "./function-storage.js"
+import { importFile, findIndex } from "./function-storage.js"
 import { input } from "./movement.js"
 import { updateInventory, lookInCanvas } from "./inventory.js"
 import { gridCells, moveTowards, behindSprite } from "./grid.js"

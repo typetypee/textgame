@@ -1,4 +1,4 @@
-import { importJSON, findIndex } from "./function-storage.js"
+import { importFile, findIndex } from "./function-storage.js"
 import { loadTilemap } from "./graphics.js"
 
 //this function is for the item inventory
@@ -14,8 +14,8 @@ const inventory = document.getElementById("inventory"), boxContainer = document.
 var itemList = "";
 
 //get the list of items available
-importJSON("../json/items.json", null, function(json) {
-  itemList = json;
+importFile("../json/items.json", function(data) {
+  itemList = JSON.parse(data);
   updateInventory();
 });
 

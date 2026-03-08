@@ -1,0 +1,20 @@
+$trongle-needs-help
+[roy]
+________
+Roy: "My friend Cab lost his right angle."
+"How will he ever get through customs without it?"
+?"Please help him."
+    -"Hmmmmm fine.">helped
+    -"No I don't feel like it. :/">rejected
+"Poor Cab. :(" @rejected >endNode
+"He needs it by tonight, find it quick. D:" @helped
+"Go interrogate Cab."
+________
+Roy: "What's Cab going to do?"
+"So sad. :("
+
+[sink]
+________
+?noName: "Let's rob Roy's house!"
+     -"Look inside cabinet.">endNode !lookIn:cabinet-sink
+     -"Look inside sink." >endNode !lookIn:sink-sink

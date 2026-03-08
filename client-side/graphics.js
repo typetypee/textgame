@@ -1,5 +1,5 @@
 import { currentTilemap } from "./main.js"
-import { importJSON } from "./function-storage.js"
+import { importFile } from "./function-storage.js"
 
 //this function is all about loading in the tilemaps
 
@@ -14,8 +14,9 @@ export function loadTilemap(jsonName, pThis, cThis) {
   return new Promise(function(resolve) {
 
     pThis.load.once(Phaser.Loader.Events.COMPLETE, function() {
-      importJSON(jsonName, null, function(json) {
+      importFile(jsonName, function(data) {
         (async () => {
+          let json = JSON.parse(data);
           const tilefromJson = cThis.make.tilemap({ key: "tileMap" });
           //json is the same as tilefromJson, but it is needed to get the tileset image source since tilefromJson does not provide this
           //add in the tilesets

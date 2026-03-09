@@ -1,8 +1,9 @@
-import { player, createThis, currentTextScene, allBodies, getTempBodies, currentTilemap, tileSize } from "./main.js"
+import { player, createThis, currentTextScene, allBodies, getTempBodies, currentTilemap, tileSize, saveData } from "./main.js"
 import { touchingWho } from "./grid.js"
-import { importFile, findIndex, markTrue } from "./function-storage.js"
+import { importFile, findIndex, markTrue, createSaveDataKey } from "./function-storage.js"
 import { lookInPlace } from "./inventory.js"
 import { convertReedableToJSON } from "./reedable.js"
+import { checkAndSwitchScene } from "./scene-switch.js"
 
 //this file contains the code for the text system of the game
 
@@ -18,6 +19,8 @@ var textSystem = {
   currentLine: 1, //current line in text, i think the 1 is arbitrary here...
   isQuestion: false, //determines whether the current line is a choice
   option: 0, //the choice selected
+  currentActor: "",
+  currentNode: ""
 }
 
 function retrieveBranch(key) { //unlike the runscene/runlevel, this is for retrieving text-specific info rather than visuals
@@ -27,17 +30,28 @@ function retrieveBranch(key) { //unlike the runscene/runlevel, this is for retri
     importFile("../reedable/script.txt", function(data) {
       //process the data
       let json = convertReedableToJSON(data);
-      console.log(json);
-      resolve(data);
+      let specificJSON = json[currentTextScene][key];
+      resolve(specificJSON);
     })
   })
 }
 
-function runAndSaveText(json, name) {
+function retrieveSaveData() {
+  return new Promise((resolve) => {
+    importFile("../storage/save.json", function(data){
+    let json = JSON.parse(data);
+    resolve(json);
+    })
+  }) 
+}
+
+//this function saves the currentnode to the textdata variable (which is the text the textengine can acesss), and then will begin running the textengine
+function runAndSaveText(json, name) { //text data will be the specific node
   textData = json; //where the advanceText can access the current dialgue
   advanceText();
 }
 
+//will find the message with the corresponding label and return the index of it
 function findLabel(label) {
   var index = findIndex(textData, "label", label);
   return textData.indexOf(textData[index]);
@@ -49,6 +63,7 @@ function advanceText() {
   var currentStep = textData[textSystem.currentLine]; //the current line being displayed in the story
 
   if (textSystem.currentLine < textData.length) { //if the story is not over yet
+  
     //**PLAYER RECIVES ITEM**//
     //i must recontemplate this .receiveItem event...
     if (undefined !== currentStep.recieveItem) {
@@ -110,26 +125,20 @@ function advanceText() {
 
     if (undefined !== currentStep.m) { //if the "message" of the current dialogue is not undefined...
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
-
       //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
       if (undefined !== currentStep.event) {
-        console.log("O")
+        //more events will likekly be created later!
         if (currentStep.event.split(":")[0] == "lookIn") lookInPlace(currentStep.event.split(":")[1]);
       }
-
       if (undefined !== currentStep.next) {
-        if (currentStep.next === "endNode") endNode();
-        else if (currentStep.next === "markNodeDone") {
-          markTrue(JSON.stringify(list), "marknodedone");
-          textSystem.currentLine = textData.length;
-        } else textSystem.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
-      } else { //the dialogue 1 has no "next" parameter
+        if (currentStep.next === "endNode") textSystem.currentLine = textData.length;
+        else textSystem.currentLine = findLabel(currentStep.next); //so the dialogue 2 is found in the story
+      } else { //if the dialogue 1 has no "next" parameter
         textSystem.currentLine++; //just go to the next dialogue in the story
       }
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
       //okay okay so here the player has already answered?, cuz like, we're moving on from the question
       if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
-
         var chosenAnswer = currentStep.answers[textSystem.option];
         //trigger the event associated with the answer choice
         if (undefined !== chosenAnswer.event) {
@@ -137,8 +146,9 @@ function advanceText() {
           if (chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
         }
 
-        if (chosenAnswer.next === "endNode") endNode();
-        else {
+        if (chosenAnswer.next === "endNode") endNode(); //this is only really for item interactions
+        else {//if the answer choice does not automatically end the node, occurs most of the time in character interactions
+          //this must be edited to fit the new system, but i am not yet working on the quest system, so this can wait
           if (chosenAnswer.removeInventory !== undefined) {
             removeInventory(chosenAnswer);
           }
@@ -150,16 +160,13 @@ function advanceText() {
 
           textSystem.currentLine = findLabel(chosenAnswer.next); //find the next line
           currentStep = textData[textSystem.currentLine]; //set the current step to the next line
-
-          textBox.innerText = currentStep.m; //set the text to the next line
-          if (undefined !== currentStep.n) textName.innerText = currentStep.n; //display the name
-
+          
           //make the answer box disappear
           document.getElementById("answer-container").style.display = "none";
           for (var q = 0; q < answerBoxes.length - 1; q++) {
             answerBoxes[q].style.display = "none";
           }
-
+          advanceText(); //now display the message!
           textSystem.isQuestion = false; //question process is over. set it to false now
         }
 
@@ -179,10 +186,13 @@ function advanceText() {
 
       }
     }
-    if (undefined !== currentStep.complete && currentStep.complete !== "isLast") markTrue(JSON.stringify(list), "marknodedone");
   }
-
   else if (textSystem.currentLine === textData.length) { //basically means we are finished, and we're esentially reseting
+    saveData[currentTextScene][textSystem.currentActor][textSystem.currentNode] = true;
+    document.getElementById("answer-container").style.display = "none";
+    for (var q = 0; q < answerBoxes.length - 1; q++) {
+      answerBoxes[q].style.display = "none";
+    }
     gameState = "interact"
     textData = "";
     textSystem.currentLine = 0;
@@ -193,44 +203,59 @@ function advanceText() {
 
 //add event listener click function to answer buttons
 for (var i = 0; i < answerBoxes.length - 1; i++) {
-  answerBoxes[i].addEventListener("click", function() {
-    if (textSystem.isQuestion === true) {
+  answerBoxes[i].addEventListener("click", function(e) {
+    if(textSystem.isQuestion === true) {
       textSystem.option = answerBoxes.indexOf(this);
       advanceText();
     }
+    e.stopPropagation();
   });
 }
 
-async function runText(npc) { //activates when an npc is clicked, different from advanceText, which runs when clicking during a dialogue sequence
+async function intialRunText(actor) { //activates when an npc is clicked, different from advanceText, which runs when clicking during a dialogue sequence
   if (gameState === "interact") {
-
-    var tempData = await retrieveBranch(npc); //the dialogue for a specfic npc
-
-    var theChosenOne; //the node currently chosen for the npc's scene
-
-    for (var i = 0; i < temp.length; i++) { //look through all the dialogue for the npc for the next one that is uncompleted
-
-      var thing = temp[i] //the specific dialogue branch of the npc
-      var completeThing = findIndex(thing, "complete", true); //find any messages that contain a complete marked as true, will come as -1 if there are none that are true
-      //this function checks for a true rather than looking for falses because a certain dialogue section can have multiple choices due to branching dialogue
-      var isLastCheck = findIndex(thing, "complete", "isLast");
-
-      if (completeThing === -1) {
-        theChosenOne = i;
-        break; //end it because uncomplete has been found
-      }
-      else if (isLastCheck === "isLast") {
-        theChosenOne = i; //no uncompletes. repeat the last dialogue
-        break;
+    let actorData = await retrieveBranch(actor); //get the branch for this specified actor
+    function createNewKey(){
+      //write this new key to the save data
+      saveData[currentTextScene] = {};
+      saveData[currentTextScene][actor] = [];
+      //generate the save keys for each node
+      for(let i = 0; i < actorData.length; i++) {
+        saveData[currentTextScene][actor].push(false); //the key "actor" is an array containing true or false statements, representing if the node has been completed or not
       }
     }
 
-    list = [currentTextScene, npc, theChosenOne]
+    //check the save data if the save key even exists...
+    if(saveData[currentTextScene] !== undefined) { //is it the scene even in the save data?
+      if(saveData[currentTextScene][actor] !== undefined) {//is the npc even in the save data
+        //nothing happens lmao
+      } else { 
+        createNewKey();
+      }
+    } else { //we need to write this new scene if it doesn't even exist, this means it is our first time talking in this scene
+      //scene initilzation might need to be revised, hence this code will need to be revised, but for now it works...
+      //write this key to the save data of the currentscene and actor
+      createNewKey();
+    }
 
-    runAndSaveText(temp[theChosenOne]); //read the comments in this function for info about it
+    let currentNode; //the node currently chosen for the npc's scene
+
+    for (var i = 0; i < saveData[currentTextScene][actor].length; i++) { //look through all the dialogue for the npc for the next one that is uncompleted
+      if(saveData[currentTextScene][actor][i] == false) {
+        currentNode = i;
+        break;
+      }
+      else if(i == saveData[currentTextScene][actor].length - 1) { //if all the nodes are marked complete, then just repeat the last node
+        currentNode = i;
+      }
+    }
+    textSystem.currentNode = currentNode;
+    textSystem.currentActor = actor;
+    runAndSaveText(actorData[currentNode]); //read the comments in this function for info about it
     gameState = "text";
   }
   else {
+    //i have no idea what this even does
     retrieveBranch(branch);
     gameState = "text";
   }
@@ -256,19 +281,26 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
         name = touchingWho(tempBodies[i], player.position.x / tileSize, player.position.y / tileSize);
         if (name !== false) break;
       }
-      if (name !== false) runText(name);
+      if (name !== false) intialRunText(name);
 
       //or interacting with an object
       var getInteractLayer = currentTilemap.objects[0].objects;
+      console.log(currentTilemap)
       let interactWho;
       for (let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
         interactWho = touchingWho(getInteractLayer[k], player.position.x / tileSize, player.position.y / tileSize);
         if (interactWho !== false) break;
       }
-      if (interactWho !== false) runText(interactWho);
+      if (interactWho !== false) intialRunText(interactWho);
     }
-    if (gameState === "text") advanceText();
+    else if (gameState === "text") advanceText();
   }
+
+  if(e.keyCode === 83) {
+    console.log(saveData);
+  }
+
+  if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) checkAndSwitchScene();
 
 })
 
@@ -276,5 +308,5 @@ window.addEventListener("click", function(e) {
   if (textSystem.isQuestion === false && gameState === "text") {
     if (textSystem.currentLine !== 0) advanceText();
   }
-
+  e.stopPropagation();
 })

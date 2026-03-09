@@ -20,6 +20,7 @@ function calcCoord(axis, coord) {
   else if (axis === "height") return gameWindow.offsetHeight * coord;
 }
 
+//find the index of an object in an array that contains a certain key + element combination
 export function findIndex(array, key, element) {
   var index = array.findIndex(function(obj) {
     return obj[key] === element;
@@ -96,6 +97,32 @@ export const markTrue = function(data, type, success, error) {
   };
   xhr.send(data);
 }
+
+export const createSaveDataKey = function(data, type, success, error) {
+  var xhr = new XMLHttpRequest();
+  let server = "http://localhost:3000/" + type;
+
+  xhr.open("POST", server, true);
+
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onreadystatechange = function() {
+
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        if (success)
+          success(xhr.responseXML);
+        console.log(this.responseText);
+      } else {
+        if (error)
+          error(xhr);
+        console.log("Error sending data!");
+      }
+    }
+  };
+  xhr.send(data);
+}
+
 
 function parseHTML(html) {
   var t = document.createElement('template');

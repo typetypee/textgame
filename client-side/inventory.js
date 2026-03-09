@@ -3,7 +3,7 @@ import { loadTilemap } from "./graphics.js"
 
 //this function is for the item inventory
 
-var numSpaces = 5;
+var numSpaces = 5; //i have no idea what this does
 var infoBox = document.getElementById("info-box");
 var playerInventory = [
   { "name": "Pen", "amount": "2" },
@@ -13,23 +13,24 @@ var playerInventory = [
 const inventory = document.getElementById("inventory"), boxContainer = document.getElementById("box-container");
 var itemList = "";
 
-//get the list of items available
+//get the list of items available, item.json is a catalog of every single item in the game + their description
 importFile("../json/items.json", function(data) {
   itemList = JSON.parse(data);
   updateInventory();
 });
 
-function addToInventory(arrayList) {
+function addToInventory(arrayList) { //array will be in the format of an array contains other arrays, those other arrays will be in the format [itemName, number]
   for (var i = 0; i < arrayList.length; i++) {
-    var itemInfo = itemList[arrayList[i].name];
-    //check if item already exists in inventory
-    let itExists = findIndex(playerInventory, "name", arrayList[i].name);
-    if (itExists !== -1) playerInventory[itExists].amount += arrayList[i].amount;
-    else playerInventory.push(arrayList[i]);
+    var itemInfo = itemList[arrayList[i][0]];
+    //check if item already exists in inventory, if it does, just increase the count
+    let itExists = findIndex(playerInventory, "name", arrayList[i][0]);
+    if (itExists !== -1) playerInventory[itExists].amount += arrayList[i][1];
+    else playerInventory.push({"name": arrayList[i][0], "amount": arrayList[i][1]});
   }
   updateInventory();
 }
 
+//removes an item from the inventory, this is for things like quests and npc taking an item needed for a quest
 function removeFromInventory(itemName, amount) {
   var itemIndex = findIndex(playerInventory, "name", itemName);
   if (playerInventory[itemIndex].amount == 1) playerInventory.splice(itemIndex, 1);
@@ -39,6 +40,7 @@ function removeFromInventory(itemName, amount) {
 
 export function updateInventory() {
   boxContainer.textContent = "";
+  //show each item in the inventory
   for (var b = 0; b < playerInventory.length; b++) {
     var box = document.createElement("div");
     box.classList.add("inventory-box");
@@ -120,13 +122,15 @@ export async function lookInPlace(place) {
   var tile;
   cThis.input.on('pointermove', function(pointer) {
     tile = currentTilemap.getTileAtWorldXY(pointer.worldX, pointer.worldY);
-    if (tile !== null) hoverVisible = true;
+    //display the hover context menu or not
+    if (tile !== null) hoverVisible = true; 
     else hoverVisible = false;
     showHover(tile, pointer.worldX, pointer.worldY);
   }, cThis);
+  //when you click on an item, it will add it to the inventory
   cThis.input.on("pointerup", function(pointer) {
     tile.visible = false;
-    addToInventory([{ "name": tile.getTileData().type, "amount": 1 }]);
+    addToInventory([[tile.getTileData().type, 1]]);
   })
 
 

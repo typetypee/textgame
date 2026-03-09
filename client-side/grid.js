@@ -90,6 +90,7 @@ export function touchingWho(bodies, x, y) {
 
   //depends on if checking position of matterjs sprite or of tiled obejct
   if (bodies.position === undefined) { //returns undefined if the body is a tiled object (a tiled object is a tile)
+    //for tiled objects
     bodiesX = getCoord(bodies.x, "x");
     bodiesY = getCoord(bodies.y, "y");
     //calculate width and height of object
@@ -97,6 +98,7 @@ export function touchingWho(bodies, x, y) {
     height = bodies.polygon[2].y / tileSize;
 
   } else { //matterjs sprite, so bodies.position is not undefined
+    //for matterjs sprites, given by phaser
     bodiesX = getCoord(bodies.position.x, "x");
     bodiesY = getCoord(bodies.position.y, "y");
     //make sure to add code to calculate width and height for sprites
@@ -110,12 +112,13 @@ export function touchingWho(bodies, x, y) {
       let up = y == bodiesY - 1 && x == bodiesX + w
       let down = y == bodiesY + 1 && x == bodiesX + w
 
+      //if is a tiled object
       if (bodies.position === undefined) {
         for (let p = 0; p < bodies.properties.length; p++) {
           if (eval(bodies.properties[p].name)) return bodies.name;
           else if (p == bodies.properties.length - 1 && h == height - 1 && w == width - 1) return false;
         }
-      }
+      } //if is a matterjs objecct
       else if (left || right || up || down) {
         if (bodies.position === undefined) return bodies.name;
         else return bodies.label;

@@ -28,6 +28,8 @@ export let allBodies;
 export let createThis;
 export let preloadThis;
 
+export let saveData = {};
+
 //}
 
 const config = {
@@ -146,24 +148,13 @@ async function create() {
   currentTextScene = "trongle-needs-help";
   createThis = this; //ermmm wtf is this for?
 
-  //var joe = await hihi();
-
-  //console.log(joe);
-
-  //this.background = this.add.image(0, 0, "sky").setOrigin(0, 0)
-
-  //this.background.displayWidth = this.sys.canvas.width;
-  //this.background.displayHeight = this.sys.canvas.height;
-
-  currentTilemap = "heheheheheh"
+  currentTilemap = ""
   currentTilemap = await loadTilemap("../json/house.json", preloadThis, createThis);
 
 
-  //loadTilemap(this, "untitled", "manyTiles", "[Base]BaseChip_pipo");
-  //currentTilemap = this.make.tilemap({ key: "untitled" });; //the name of the jsonFile is the key
-
+ 
   //loadTilemap("house", ["house1", "house2", "house3", "house4"], )
-  var depth = currentTilemap.layers.length - 2;
+  let depth = currentTilemap.layers.length - 2;
   //we subtract -1 cuz index starts at 0
   //we subtract another -1 to move below the behind layer
   //originally there was a -0.5 so player could be between front and behind layer, but stair collide layer solves that

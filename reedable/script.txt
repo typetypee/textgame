@@ -18,3 +18,17 @@ ________
 ?noName: "Let's rob Roy's house!"
      -"Look inside cabinet.">endNode !lookIn:cabinet-sink
      -"Look inside sink." >endNode !lookIn:sink-sink
+
+[fridge]
+________
+noName: "The fridge is locked."
+
+[radio]
+________
+noName: "It's a shiny new radio."
+"It doesn't turn on though."
+"Odd. Roy should get a refund."
+
+[sink-side]
+________
+noName: "This cabinet is locked."

@@ -8,3 +8,7 @@ The story will be very state-driven, certain paths will be unlocked if certain s
 I'm not sure if I should just combine this and text-nodes.
 
 Anyway, I intend to make speech.json readonly, while states.json is something made for every user, kind of to track and save progress.
+
+mar 8 2026
+i have now accomplished what i said i'd do in the above. in notes.txt i mentioned i made reedable (script.txt), it is read-only, and the game engine will save states to a variable/
+yes, down the node.js. no more server side. save data will be saved to local variables.

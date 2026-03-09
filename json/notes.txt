@@ -40,3 +40,6 @@ so,
   "person1": [{"blah blah text blah blah"}, {blah blah}],
   "random duck": [{"ooga booga"}]
 }
+
+mar 3 2026 note
+i have created my own new language called reedable. it is very simple, it is just to make the json for dialogue easier to write lmao

@@ -104,14 +104,18 @@ export function input() {
 
   //this functions runs if collision checks are passed, and the player will offically be moved
   function moveEntity() {
+
     //these lines move the players up or down in the layer
+    //moves the player in the layer below (moving behind a character)
     if (tempBodies.some(bodies => behindSprite(bodies, nextPosX / tileSize, nextPosY / tileSize))) player.depth = player.ogDepth - 0.5;
+    //moves the player in the layer above (moving in front of a character)
     else if (tempBodies.some(bodies => frontSprite(bodies, nextPosX / tileSize, nextPosY / tileSize))) player.depth = player.ogDepth + 0.25;
     else player.depth = player.ogDepth;
 
-    //move the player
+    //change the position of the player, note that this does not yet physically move the player, more collision checks must be done
     player.destinationPosition.x = nextPosX;
     player.destinationPosition.y = nextPosY;
+
   }
 
   //collision check, to pass, space must be unblocked, there must be no npc blocking and the entity must be within world bounds

@@ -15,7 +15,7 @@ app.post("/marknodedone", function(req, res, err) {
 
   res.send("Data was received!");
   console.log("Working!");
-  changeData(req.body, "../json/speech.json");
+  changeData(req.body, "../storage/script.json");
   res.end();
 })
 
@@ -50,6 +50,24 @@ app.post("/markquestdone", function(req, res, err){
 
 })
 
+function writeData(list, fileName) {
+  var temp;
+  const data = fs.readFileSync(fileName, "utf-8"); //the file we are writing to
+
+  temp = JSON.parse(data);
+
+
+
+  fs.writeFileSync(fileName, JSON.stringify(temp, null, "\t"));
+  console.log("Edited!");
+
+}
+
+app.post("/writenewkey"), function(req, res, err) {
+  res.send("Data was recieved!");
+  console.log("Working!");
+
+}
 
 app.listen(3000, function(){
   console.log("Server is running on port: 3000")

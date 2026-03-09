@@ -85,8 +85,6 @@ export function convertReedableToJSON(text){
                             allIndexes.push(eventIndex);
                         
                         }
-                        console.log(allIndexes)
-                        console.log(afterMessage)
                         
                         //now actually derive the text from the strings given the indexes
                         if(afterMessage.includes(">")) { //next indicator
@@ -142,7 +140,7 @@ export function convertReedableToJSON(text){
 
                     //the name definition
                     if(cleanLine.includes(":")) {
-                        beforeMessage = cleanLine.split("\"")[0].trim();
+                        let beforeMessage = cleanLine.split("\"")[0].trim();
                         if(beforeMessage.includes(":")) {
                             currentElement.n = beforeMessage.split(":")[0].slice(1).trim(); //the slice is so the question mark is excluded
                         } //will check a for a colon before the message
@@ -195,7 +193,7 @@ export function convertReedableToJSON(text){
                     
                     //the name definition
                     if(cleanLine.includes(":")) {
-                        beforeMessage = cleanLine.split("\"")[0];
+                        let beforeMessage = cleanLine.split("\"")[0];
                         if(beforeMessage.includes(":")) {
                             let ccurrentElement = currentNode[currentNode.length-1];
                             currentElement.n = beforeMessage.split(":")[0];
@@ -206,5 +204,5 @@ export function convertReedableToJSON(text){
             }
         }
     }
-    return finalJSON;
+    return finalJSON; 
 }

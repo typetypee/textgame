@@ -57,63 +57,67 @@ function findLabel(label) {
   return textData.indexOf(textData[index]);
 }
 
+function recieveItem(currentStep){
+  //**PLAYER RECIVES ITEM**//
+  //i must recontemplate this .receiveItem event...
+  if (undefined !== currentStep.recieveItem) {
+    var itemList = currentStep.recieveItem.items
+    addToInventory(itemList);
+    for (var i = 0; i < itemList.length; i++) {
+      writeAlert("You recieved " + itemList[i].name + " x" + itemList[i].amount);
+    }
+  }
+}
+
+//**FUNCTION LIST**//
+//used to end the interaction automatically
+function endNode() {
+  textSystem.currentLine = textData.length;
+  advanceText(); //automaticaclly end
+}
+//i don't even remember what this is for
+function checkInventory(message) {
+  for (var k = 0; k < message.checkInventory.length; k++) { //inventory check
+    if (findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
+      return false; //if even one item is missing, return false
+    }
+  }
+  return true; //all items in inventory false
+}
+
+//for setting up a question
+function questionSetup(currentStep) {
+  textSystem.isQuestion = true;
+
+  //display question
+  textBox.innerText = currentStep.question;
+
+  //display answers
+  document.getElementById("answer-container").style.display = "block";
+
+  for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
+    answerBoxes[w].style.display = "none";
+  }
+
+  for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
+    answerBoxes[i].style.display = "block";
+    answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
+  }
+}
+
+function removeInventory(message) {
+      for (var p = 0; p < message.removeInventory.length; p++) {
+        removeFromInventory(message.removeInventory[p]);
+      }
+    }
+
 //this function is usually triggered by a keypress, it advances text along
 function advanceText() {
 
   var currentStep = textData[textSystem.currentLine]; //the current line being displayed in the story
 
   if (textSystem.currentLine < textData.length) { //if the story is not over yet
-  
-    //**PLAYER RECIVES ITEM**//
-    //i must recontemplate this .receiveItem event...
-    if (undefined !== currentStep.recieveItem) {
-      var itemList = currentStep.recieveItem.items
-      addToInventory(itemList);
-      for (var i = 0; i < itemList.length; i++) {
-        writeAlert("You recieved " + itemList[i].name + " x" + itemList[i].amount);
-      }
-    }
 
-    //**FUNCTION LIST**//
-    //used to end the interaction automatically
-    function endNode() {
-      textSystem.currentLine = textData.length;
-      advanceText(); //automaticaclly end
-    }
-    //i don't even remember what this is for
-    function checkInventory(message) {
-      for (var k = 0; k < message.checkInventory.length; k++) { //inventory check
-        if (findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
-          return false; //if even one item is missing, return false
-        }
-      }
-      return true; //all items in inventory false
-    }
-
-    function removeInventory(message) {
-      for (var p = 0; p < message.removeInventory.length; p++) {
-        removeFromInventory(message.removeInventory[p]);
-      }
-    }
-    //for setting up a question
-    function questionSetup() {
-      textSystem.isQuestion = true;
-
-      //display question
-      textBox.innerText = currentStep.question;
-
-      //display answers
-      document.getElementById("answer-container").style.display = "block";
-
-      for (var w = 0; w < answerBoxes.length - 1; w++) { //hide all the answers first...
-        answerBoxes[w].style.display = "none";
-      }
-
-      for (var i = 0; i < currentStep.answers.length; i++) { //display the ones that need to be displayed
-        answerBoxes[i].style.display = "block";
-        answerBoxes[i].innerText = (currentStep.answers[i].m); //and display their text
-      }
-    }
 
     if (undefined !== currentStep.n) { //...set the name parameter of the textbox as current name
       if (currentStep.n === "noName") textName.style.display = "none"
@@ -180,8 +184,8 @@ function advanceText() {
             textBox.innerText = currentStep.question;
             textSystem.currentLine = textData.length; //force the ending >:), but end it on the next click
             //even if even one item is missing from inventory, end the node
-          } else questionSetup(); //the check has been passed
-        } else questionSetup(); //set up question as normal
+          } else questionSetup(currentStep); //the check has been passed
+        } else questionSetup(currentStep); //set up question as normal
 
       }
     }
@@ -200,7 +204,7 @@ function advanceText() {
 
 }
 
-//add event listener click function to answer buttons
+//add the click event listener to answer buttons
 for (var i = 0; i < answerBoxes.length - 1; i++) {
   answerBoxes[i].addEventListener("click", function(e) {
     if(textSystem.isQuestion === true) {

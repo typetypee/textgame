@@ -16,8 +16,8 @@ Roy: "What's Cab going to do?"
 [sink]
 ________
 ?noName: "Let's rob Roy's house!"
-     -"Look inside cabinet.">endNode !lookIn:cabinet-sink
-     -"Look inside sink." >endNode !lookIn:sink-sink
+     -"Look inside cabinet.">endNode !lookInPlace("cabinet-sink")
+     -"Look inside sink." >endNode !lookInPlace("sink-sink")
 
 [fridge]
 ________

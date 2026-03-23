@@ -53,7 +53,11 @@ export function convertReedableToJSON(text){
             else {
                 //is an answer to a question
                 if(lastLineWasQuestion || cleanLine.startsWith("-")) { //if the last line was a question, it is expected there will be answers following. the secondary statement matters if the last line was an answer for example
-                    let afterMessage = cleanLine.split("\"")[2]; //the stuff after the message
+                    let firstQuote = cleanLine.indexOf('"');
+                    let secondQuote = cleanLine.indexOf('"', firstQuote + 1);
+
+                    // This gets everything from the character immediately after the second quote to the end
+                    let afterMessage = cleanLine.substring(secondQuote + 1).trim();
                     let currentElement = ""; //the actual json of the current answer in the question
                     
                     if(!cleanLine.startsWith("-")) {
@@ -100,7 +104,11 @@ export function convertReedableToJSON(text){
                 //is a question
                 else if(cleanLine.startsWith("?")) {
                     let message = cleanLine.match(/"([^"]*)"/)?.[1]; //get the content of the question
-                    let afterMessage = cleanLine.split("\"")[2]; //the stuff after the message
+                    let firstQuote = cleanLine.indexOf('"');
+                    let secondQuote = cleanLine.indexOf('"', firstQuote + 1);
+
+                    // This gets everything from the character immediately after the second quote to the end
+                    let afterMessage = cleanLine.substring(secondQuote + 1).trim();
 
                     let currentElement = "";
 
@@ -150,7 +158,11 @@ export function convertReedableToJSON(text){
                 //is a message, has no special symbol
                 else {
                     let message = cleanLine.match(/"([^"]*)"/)?.[1]; //get the content of the message
-                    let afterMessage = cleanLine.split("\"")[2]; //the stuff after the message
+                    let firstQuote = cleanLine.indexOf('"');
+                    let secondQuote = cleanLine.indexOf('"', firstQuote + 1);
+
+                    // This gets everything from the character immediately after the second quote to the end
+                    let afterMessage = cleanLine.substring(secondQuote + 1).trim();
 
 
                     currentNode.push({"m": message})

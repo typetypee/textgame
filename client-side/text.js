@@ -127,8 +127,8 @@ function advanceText() {
       textBox.innerText = currentStep.m; //...set the content parameter of the textbox as the current content
       //if this dialogue 1 has a "next" parameter, then a dialogue 2 has a "label" that corresponds with it.
       if (undefined !== currentStep.event) {
-        //more events will likekly be created later!
-        if (currentStep.event.split(":")[0] == "lookIn") lookInPlace(currentStep.event.split(":")[1]);
+        console.log(currentStep.event)
+        eval(currentStep.event);
       }
       if (undefined !== currentStep.next) {
         if (currentStep.next === "endNode") textSystem.currentLine = textData.length;
@@ -142,8 +142,7 @@ function advanceText() {
         var chosenAnswer = currentStep.answers[textSystem.option];
         //trigger the event associated with the answer choice
         if (undefined !== chosenAnswer.event) {
-          //a specific type of event
-          if (chosenAnswer.event.split(":")[0] == "lookIn") lookInPlace(chosenAnswer.event.split(":")[1]);
+          eval(chosenAnswer.event);
         }
 
         if (chosenAnswer.next === "endNode") endNode(); //this is only really for item interactions
@@ -285,7 +284,6 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
 
       //or interacting with an object
       var getInteractLayer = currentTilemap.objects[0].objects;
-      console.log(currentTilemap)
       let interactWho;
       for (let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
         interactWho = touchingWho(getInteractLayer[k], player.position.x / tileSize, player.position.y / tileSize);
@@ -298,6 +296,9 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
 
   if(e.keyCode === 83) {
     console.log(saveData);
+  }
+  if(e.keyCode === 68) {
+    console.log(textData);
   }
 
   if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) checkAndSwitchScene();

@@ -81,7 +81,7 @@ export function isNPCBlocking(bodies, x, y) {
   } else return false;
 }
 
-//this function gives 
+//this function gives the name of the object the player is touching
 export function touchingWho(bodies, x, y) {
   var bodiesX;
   var bodiesY;

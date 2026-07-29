@@ -1,9 +1,8 @@
-import { currentTilemap } from "./main.js"
 import { importFile } from "./function-storage.js"
 
 //this function is all about loading in the tilemaps
 
-export function loadTilemap(jsonName, pThis, cThis) {
+export function loadTilemap(jsonName, pThis) {
   //jsonName: the name of the jsonKey in create (not neccesarily the name of the json file)
   //imgName: the name of the image key in create (not neccesarily the name of the image file)
   //tilsheetName: the actual name of the tilesheet, can find name in the json file
@@ -17,7 +16,7 @@ export function loadTilemap(jsonName, pThis, cThis) {
       importFile(jsonName, function(data) {
         (async () => {
           let json = JSON.parse(data);
-          const tilefromJson = cThis.make.tilemap({ key: "tileMap" });
+          const tilefromJson = pThis.make.tilemap({ key: "tileMap" });
           //json is the same as tilefromJson, but it is needed to get the tileset image source since tilefromJson does not provide this
           //add in the tilesets
           let allTilesets = [];
@@ -42,7 +41,7 @@ export function loadTilemap(jsonName, pThis, cThis) {
             layer.setDepth(i);
             layer.scale
           }
-
+          //currentTilemap = tilefromJson;
           resolve(tilefromJson)
         })();
       })

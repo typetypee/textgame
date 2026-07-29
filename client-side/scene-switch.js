@@ -1,4 +1,4 @@
-import { player, currentTilemap, tileSize } from "./main.js"
+import { tileSize } from "./main.js"
 import { touchingWho } from "./grid.js"
 
 export function checkAndSwitchScene() {

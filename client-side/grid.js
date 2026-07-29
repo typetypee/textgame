@@ -1,9 +1,9 @@
-import { createThis, currentTilemap, tileSize } from "./main.js"
+import { createThis, tileSize } from "./main.js"
 
 //this file contains many functions grid based collision detection and tile movement
 
 //convers a grid coordinate into to pixel coordinates for the canvas
-export function gridCells(n) {
+export function gridToPixels(n) {
   return n * tileSize;
 }
 
@@ -13,6 +13,7 @@ export function gridCells(n) {
 export function moveTowards(person, destinationPosition, speed) {
   let distanceToTravelX = destinationPosition.x - person.position.x;
   let distanceToTravelY = destinationPosition.y - person.position.y;
+//console.log(person.position.x)
 
   //pythagorean theoreom type of stuff
   let distance = Math.sqrt(distanceToTravelX ** 2 + distanceToTravelY ** 2);
@@ -25,7 +26,7 @@ export function moveTowards(person, destinationPosition, speed) {
     person.position.y = destinationPosition.y;
   } else {
 
-    //this will actually 
+    //this will actually move the person
     let normalizedX = distanceToTravelX / distance;
     let normalizedY = distanceToTravelY / distance;
 
@@ -81,6 +82,7 @@ export function isNPCBlocking(bodies, x, y) {
   } else return false;
 }
 
+//NOTE, i gotta change this function around because i am no longer using matterjs
 //this function gives the name of the object the player is touching
 export function touchingWho(bodies, x, y) {
   var bodiesX;
@@ -88,6 +90,7 @@ export function touchingWho(bodies, x, y) {
   var width = 1;
   var height = 1;
 
+    //get the coordinates of the 
   //depends on if checking position of matterjs sprite or of tiled obejct
   if (bodies.position === undefined) { //returns undefined if the body is a tiled object (a tiled object is a tile)
     //for tiled objects
@@ -99,8 +102,8 @@ export function touchingWho(bodies, x, y) {
 
   } else { //matterjs sprite, so bodies.position is not undefined
     //for matterjs sprites, given by phaser
-    bodiesX = getCoord(bodies.position.x, "x");
-    bodiesY = getCoord(bodies.position.y, "y");
+    bodiesX = bodies.grid.x;
+    bodiesY = bodies.grid.y;
     //make sure to add code to calculate width and height for sprites
   }
 
@@ -118,10 +121,10 @@ export function touchingWho(bodies, x, y) {
           if (eval(bodies.properties[p].name)) return bodies.name;
           else if (p == bodies.properties.length - 1 && h == height - 1 && w == width - 1) return false;
         }
-      } //if is a matterjs objecct
+      } //if is a matterjs objecct (again, i GOTTA adjust ts cuz no more matterjs)
       else if (left || right || up || down) {
-        if (bodies.position === undefined) return bodies.name;
-        else return bodies.label;
+        if (bodies.position === undefined) return bodies.name; //this seems extraneous lmao
+        else return bodies.name;
       } else if (w == width - 1 && h == height - 1) return false;
     }
   }
@@ -129,16 +132,16 @@ export function touchingWho(bodies, x, y) {
 
 //this function is primarily for shifting an entity down a layer so that when they are "behind" another entity (they are really just above them)
 export function behindSprite(bodies, x, y) {
-  var bodiesX = getCoord(bodies.position.x, "x");
-  var bodiesY = getCoord(bodies.position.y, "y");
+  var bodiesX = bodies.grid.x;
+  var bodiesY = bodies.grid.y;
   if ((x == bodiesX && y == bodiesY - 1)) return true;
   else return false;
 }
 
 //similar to the above function, except just moves the entity up a layer if they are below another entity
 export function frontSprite(bodies, x, y) {
-  var bodiesX = getCoord(bodies.position.x, "x");
-  var bodiesY = getCoord(bodies.position.y, "y");
+  var bodiesX = bodies.grid.x;
+  var bodiesY = bodies.grid.y;
   if ((x == bodiesX && y == bodiesY + 1)) return true;
   else return false;
 }

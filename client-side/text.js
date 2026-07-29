@@ -1,4 +1,4 @@
-import { player, createThis, currentTextScene, allBodies, getTempBodies, currentTilemap, tileSize, saveData } from "./main.js"
+import { allBodies, tileSize, saveData } from "./main.js"
 import { touchingWho } from "./grid.js"
 import { importFile, findIndex, markTrue, createSaveDataKey } from "./function-storage.js"
 import { lookInPlace } from "./inventory.js"
@@ -58,7 +58,7 @@ function findLabel(label) {
 }
 
 function recieveItem(currentStep){
-  //**PLAYER RECIVES ITEM**//
+  //**playerData.sprite RECIVES ITEM**//
   //i must recontemplate this .receiveItem event...
   if (undefined !== currentStep.recieveItem) {
     var itemList = currentStep.recieveItem.items
@@ -78,7 +78,7 @@ function endNode() {
 //i don't even remember what this is for
 function checkInventory(message) {
   for (var k = 0; k < message.checkInventory.length; k++) { //inventory check
-    if (findIndex(playerInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerInventory
+    if (findIndex(playerData.spriteInventory, "name", message.checkInventory[k]) === -1) {//check if item frpm checkInventory is present in playerData.spriteInventory
       return false; //if even one item is missing, return false
     }
   }
@@ -141,8 +141,8 @@ function advanceText() {
         textSystem.currentLine++; //just go to the next dialogue in the story
       }
     } else if (undefined !== currentStep.question) { //the dialogue is not a "messasge", but a "question"
-      //okay okay so here the player has already answered?, cuz like, we're moving on from the question
-      if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the player's answer
+      //okay okay so here the playerData.sprite has already answered?, cuz like, we're moving on from the question
+      if (textSystem.isQuestion === true) { //the isQuestion state has already been activated. change the text to the response to the playerData.sprite's answer
         var chosenAnswer = currentStep.answers[textSystem.option];
         //trigger the event associated with the answer choice
         if (undefined !== chosenAnswer.event) {
@@ -173,7 +173,7 @@ function advanceText() {
           textSystem.isQuestion = false; //question process is over. set it to false now
         }
 
-      } else { //erm....it's a question but the variable has not been activated yet. set up the question so the player can respond
+      } else { //erm....it's a question but the variable has not been activated yet. set up the question so the playerData.sprite can respond
         //note that in this state, we do not move on to the next message, we remain on the question, all we have done is changed states
         //first..
 
@@ -275,13 +275,13 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
 
     if (gameState === "interact") {
       //interacting with a sprite?
-      var tempBodies = getTempBodies(player);
-      var spriteIndex = findIndex(tempBodies, "label", player.sprite.body.label);
+      var tempBodies = window.globalAllEntities;
+      var spriteIndex = findIndex(tempBodies, "label", playerData.sprite.name);
       if (spriteIndex !== -1) tempBodies.splice(spriteIndex, 1);
 
       let name;
       for (let i = 0; i < tempBodies.length; i++) {
-        name = touchingWho(tempBodies[i], player.position.x / tileSize, player.position.y / tileSize);
+        name = touchingWho(tempBodies[i], playerData.sprite.position.x / tileSize, playerData.sprite.position.y / tileSize);
         if (name !== false) break;
       }
       if (name !== false) intialRunText(name);
@@ -290,7 +290,7 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
       var getInteractLayer = currentTilemap.objects[0].objects;
       let interactWho;
       for (let k = 0; k < currentTilemap.objects[0].objects.length; k++) {
-        interactWho = touchingWho(getInteractLayer[k], player.position.x / tileSize, player.position.y / tileSize);
+        interactWho = touchingWho(getInteractLayer[k], playerData.sprite.position.x / tileSize, playerData.sprite.position.y / tileSize);
         if (interactWho !== false) break;
       }
       if (interactWho !== false) intialRunText(interactWho);
@@ -305,7 +305,7 @@ window.addEventListener("keydown", function(e) { //if a key was pressed
     console.log(textData);
   }
 
-  if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) checkAndSwitchScene();
+  //if(e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) checkAndSwitchScene();
 
 })
 
